@@ -60,11 +60,11 @@ function KanbanCard({ item, index, onClick }: KanbanCardProps) {
       {...attributes}
       {...listeners}
       onClick={onClick}
-      className="bg-gray-800 rounded-lg p-3 text-sm hover:bg-gray-700 transition cursor-grab active:cursor-grabbing shadow-lg"
+      className="bg-gray-800 rounded-lg p-3 text-sm hover:bg-gray-700 transition cursor-grab active:cursor-grabbing shadow-lg overflow-hidden"
     >
-      <div className="font-medium">{item.title}</div>
+      <div className="font-medium truncate">{item.title}</div>
       {item.description && (
-        <div className="text-gray-400 text-xs mt-1">{item.description}</div>
+        <div className="text-gray-400 text-xs mt-1 truncate">{item.description}</div>
       )}
       {item.date && (
         <div className="text-gray-500 text-xs mt-2">{item.date}</div>
