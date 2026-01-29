@@ -1,21 +1,7 @@
 [
-  {"id": "feature-1", "title": "🎯 技术指标选股器", "status": "completed"},
-  {"id": "feature-2", "title": "📊 板块轮动分析", "status": "completed"},
-  {"id": "feature-3", "title": "🔮 相似K线形态匹配", "status": "completed"},
-  {"id": "feature-4", "title": "📰 财经新闻情绪分析", "status": "completed"},
-  {
-    "id": "feature-5",
-    "title": "⚡ 异动实时监控系统",
-    "status": "in_progress",
-    "priority": 5,
-    "started_at": "2026-01-30T00:47:00+08:00",
-    "checklist": [
-      {"item": "设计异动类型定义", "done": false},
-      {"item": "实现分时数据获取", "done": false},
-      {"item": "实现大单检测", "done": false},
-      {"item": "实现封板/炸板检测", "done": false},
-      {"item": "集成推送系统", "done": false},
-      {"item": "测试验证", "done": false}
-    ]
-  }
+  {"id": "feature-1", "title": "🎯 技术指标选股器", "status": "completed", "completed_at": "2026-01-30T00:28:00+08:00"},
+  {"id": "feature-2", "title": "📊 板块轮动分析", "status": "completed", "completed_at": "2026-01-30T00:32:00+08:00"},
+  {"id": "feature-3", "title": "🔮 相似K线形态匹配", "status": "completed", "completed_at": "2026-01-30T00:38:00+08:00"},
+  {"id": "feature-4", "title": "📰 财经新闻情绪分析", "status": "completed", "completed_at": "2026-01-30T00:47:00+08:00"},
+  {"id": "feature-5", "title": "⚡ 异动实时监控系统", "status": "completed", "completed_at": "2026-01-30T01:05:00+08:00"}
 ]
