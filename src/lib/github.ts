@@ -77,18 +77,30 @@ export async function fetchIssues(repo: string = 'wendy-tracker'): Promise<any[]
   return response.json()
 }
 
-// Mock cron jobs data (will be replaced with real API)
+// Fetch real cron status from JSON file
+export async function fetchCronStatus(): Promise<CronJob[]> {
+  const url = `${import.meta.env.BASE_URL}data/cron-status.json`
+  try {
+    const response = await fetch(url)
+    if (!response.ok) throw new Error('Failed to fetch cron status')
+    const data = await response.json()
+    
+    return Object.entries(data.jobs).map(([id, job]: [string, any]) => ({
+      id,
+      name: job.name,
+      schedule: '',
+      nextRun: job.time,
+      lastRun: job.lastRun,
+      lastStatus: job.lastStatus,
+      enabled: true
+    }))
+  } catch (e) {
+    console.error('Failed to fetch cron status:', e)
+    return []
+  }
+}
+
+// Legacy mock function (deprecated)
 export function getMockCronJobs(): CronJob[] {
-  return [
-    { id: '1', name: 'market-0935', schedule: '35 9 * * 1-5', nextRun: '09:35', enabled: true, lastStatus: 'ok' },
-    { id: '2', name: 'market-1000', schedule: '0 10 * * 1-5', nextRun: '10:00', enabled: true, lastStatus: 'ok' },
-    { id: '3', name: 'market-1030', schedule: '30 10 * * 1-5', nextRun: '10:30', enabled: true, lastStatus: 'ok' },
-    { id: '4', name: 'market-1100', schedule: '0 11 * * 1-5', nextRun: '11:00', enabled: true },
-    { id: '5', name: 'market-1130', schedule: '30 11 * * 1-5', nextRun: '11:30', enabled: true },
-    { id: '6', name: 'market-1300', schedule: '0 13 * * 1-5', nextRun: '13:00', enabled: true },
-    { id: '7', name: 'market-1330', schedule: '30 13 * * 1-5', nextRun: '13:30', enabled: true },
-    { id: '8', name: 'market-1400', schedule: '0 14 * * 1-5', nextRun: '14:00', enabled: true },
-    { id: '9', name: 'market-1430', schedule: '30 14 * * 1-5', nextRun: '14:30', enabled: true },
-    { id: '10', name: 'market-close', schedule: '5 15 * * 1-5', nextRun: '15:05', enabled: true },
-  ]
+  return []
 }

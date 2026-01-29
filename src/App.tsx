@@ -10,7 +10,7 @@ import SearchFilter from './components/SearchFilter'
 import CalendarView from './components/CalendarView'
 import BurndownChart from './components/BurndownChart'
 import { parseIdeasMd } from './data/parser'
-import { fetchRawFile, fetchRecentCommits, fetchIssues, getMockCronJobs } from './lib/github'
+import { fetchRawFile, fetchRecentCommits, fetchIssues, fetchCronStatus } from './lib/github'
 import type { KanbanItem, TodoItem } from './data/parser'
 import type { GitHubCommit, CronJob } from './lib/github'
 
@@ -28,7 +28,7 @@ type TabType = 'kanban' | 'calendar' | 'stats' | 'activity'
 function App() {
   const [kanbanItems, setKanbanItems] = useState<KanbanItem[]>([])
   const [todos, setTodos] = useState<TodoItem[]>(SAMPLE_TODOS)
-  const [cronJobs] = useState<CronJob[]>(getMockCronJobs())
+  const [cronJobs, setCronJobs] = useState<CronJob[]>([])
   const [commits, setCommits] = useState<GitHubCommit[]>([])
   const [issues, setIssues] = useState<any[]>([])
   const [lastUpdate, setLastUpdate] = useState(new Date())
@@ -77,6 +77,9 @@ function App() {
       
       const openIssues = await fetchIssues('wendy-tracker')
       setIssues(openIssues)
+      
+      const cronStatus = await fetchCronStatus()
+      setCronJobs(cronStatus)
       
       setLastUpdate(new Date())
     } catch (error) {

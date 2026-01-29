@@ -1,0 +1,155 @@
+{
+  "lastUpdated": "2026-01-29T17:02:00+08:00",
+  "jobs": {
+    "daily-todo": {
+      "name": "每日计划",
+      "time": "08:30",
+      "lastRun": null,
+      "lastStatus": null
+    },
+    "market-0935": {
+      "name": "开盘简报",
+      "time": "09:35",
+      "lastRun": "2026-01-29T09:35:00+08:00",
+      "lastStatus": "ok"
+    },
+    "market-1000": {
+      "name": "半小时简报",
+      "time": "10:00",
+      "lastRun": "2026-01-29T10:00:00+08:00",
+      "lastStatus": "ok"
+    },
+    "market-1030": {
+      "name": "半小时简报",
+      "time": "10:30",
+      "lastRun": "2026-01-29T10:30:00+08:00",
+      "lastStatus": "ok"
+    },
+    "market-1100": {
+      "name": "半小时简报",
+      "time": "11:00",
+      "lastRun": "2026-01-29T11:00:00+08:00",
+      "lastStatus": "ok"
+    },
+    "market-1130": {
+      "name": "午间收盘",
+      "time": "11:30",
+      "lastRun": "2026-01-29T11:30:00+08:00",
+      "lastStatus": "ok"
+    },
+    "market-1300": {
+      "name": "午后开盘",
+      "time": "13:00",
+      "lastRun": "2026-01-29T13:00:00+08:00",
+      "lastStatus": "ok"
+    },
+    "market-1330": {
+      "name": "半小时简报",
+      "time": "13:30",
+      "lastRun": "2026-01-29T13:30:00+08:00",
+      "lastStatus": "ok"
+    },
+    "market-1400": {
+      "name": "半小时简报",
+      "time": "14:00",
+      "lastRun": "2026-01-29T14:00:00+08:00",
+      "lastStatus": "ok"
+    },
+    "market-1430": {
+      "name": "尾盘简报",
+      "time": "14:30",
+      "lastRun": "2026-01-29T14:30:00+08:00",
+      "lastStatus": "ok"
+    },
+    "market-close": {
+      "name": "收盘总结",
+      "time": "15:05",
+      "lastRun": "2026-01-29T15:05:00+08:00",
+      "lastStatus": "ok"
+    },
+    "us-2235": {
+      "name": "美股开盘",
+      "time": "22:35",
+      "lastRun": null,
+      "lastStatus": null
+    },
+    "us-2300": {
+      "name": "美股简报",
+      "time": "23:00",
+      "lastRun": null,
+      "lastStatus": null
+    },
+    "us-2330": {
+      "name": "美股简报",
+      "time": "23:30",
+      "lastRun": null,
+      "lastStatus": null
+    },
+    "us-0000": {
+      "name": "美股简报",
+      "time": "00:00",
+      "lastRun": null,
+      "lastStatus": null
+    },
+    "us-0030": {
+      "name": "美股简报",
+      "time": "00:30",
+      "lastRun": null,
+      "lastStatus": null
+    },
+    "us-0100": {
+      "name": "美股简报",
+      "time": "01:00",
+      "lastRun": null,
+      "lastStatus": null
+    },
+    "us-0130": {
+      "name": "美股简报",
+      "time": "01:30",
+      "lastRun": null,
+      "lastStatus": null
+    },
+    "us-0200": {
+      "name": "美股简报",
+      "time": "02:00",
+      "lastRun": null,
+      "lastStatus": null
+    },
+    "us-0230": {
+      "name": "美股简报",
+      "time": "02:30",
+      "lastRun": null,
+      "lastStatus": null
+    },
+    "us-0300": {
+      "name": "美股简报",
+      "time": "03:00",
+      "lastRun": null,
+      "lastStatus": null
+    },
+    "us-0330": {
+      "name": "美股简报",
+      "time": "03:30",
+      "lastRun": null,
+      "lastStatus": null
+    },
+    "us-0400": {
+      "name": "美股简报",
+      "time": "04:00",
+      "lastRun": null,
+      "lastStatus": null
+    },
+    "us-0430": {
+      "name": "美股简报",
+      "time": "04:30",
+      "lastRun": null,
+      "lastStatus": null
+    },
+    "us-close": {
+      "name": "美股收盘",
+      "time": "05:05",
+      "lastRun": null,
+      "lastStatus": null
+    }
+  }
+}
