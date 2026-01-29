@@ -7,14 +7,15 @@
     "github_issue": "https://github.com/zinan92/ashare/issues/14",
     "created_at": "2026-01-29T23:15:00+08:00",
     "checklist": [
-      {"item": "设计数据表结构", "done": false},
-      {"item": "实现 MA 计算", "done": false},
-      {"item": "实现 MACD 计算", "done": false},
-      {"item": "实现 RSI 计算", "done": false},
-      {"item": "实现布林带计算", "done": false},
-      {"item": "创建选股规则引擎", "done": false},
-      {"item": "实现金叉筛选", "done": false},
-      {"item": "创建 API 端点", "done": false},
+      {"item": "设计数据表结构", "done": true},
+      {"item": "实现 MA 计算", "done": true},
+      {"item": "实现 MACD 计算", "done": true},
+      {"item": "实现 RSI 计算", "done": true},
+      {"item": "实现布林带计算", "done": true},
+      {"item": "创建选股规则引擎", "done": true},
+      {"item": "实现金叉筛选", "done": true},
+      {"item": "创建 API 端点", "done": true},
+      {"item": "计算自选股指标 (120/348)", "done": false},
       {"item": "测试验证", "done": false}
     ]
   },
