@@ -4,6 +4,7 @@ import TodoList from './components/TodoList'
 import CronJobs from './components/CronJobs'
 import CommitLog from './components/CommitLog'
 import IssuesList from './components/IssuesList'
+import AddCardModal from './components/AddCardModal'
 import { parseIdeasMd } from './data/parser'
 import { fetchRawFile, fetchRecentCommits, fetchIssues, getMockCronJobs } from './lib/github'
 import type { KanbanItem, TodoItem } from './data/parser'
@@ -27,6 +28,18 @@ function App() {
   const [lastUpdate, setLastUpdate] = useState(new Date())
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<'kanban' | 'timeline'>('kanban')
+  const [showAddModal, setShowAddModal] = useState(false)
+
+  const handleMoveCard = (item: KanbanItem, newStage: KanbanItem['stage']) => {
+    setKanbanItems(prev => prev.map(i => 
+      i.title === item.title ? { ...i, stage: newStage } : i
+    ))
+  }
+
+  const handleAddCard = (newItem: Omit<KanbanItem, 'date'>) => {
+    const today = new Date().toISOString().split('T')[0]
+    setKanbanItems(prev => [...prev, { ...newItem, date: today }])
+  }
 
   const loadData = useCallback(async () => {
     setLoading(true)
@@ -117,8 +130,16 @@ function App() {
         <div className="lg:col-span-2 space-y-6">
           {activeTab === 'kanban' ? (
             <section>
-              <h2 className="text-lg font-semibold mb-3">📋 想法管道</h2>
-              <KanbanBoard items={kanbanItems} />
+              <div className="flex justify-between items-center mb-3">
+                <h2 className="text-lg font-semibold">📋 想法管道</h2>
+                <button
+                  onClick={() => setShowAddModal(true)}
+                  className="px-3 py-1 bg-green-600 hover:bg-green-700 rounded-lg text-sm transition"
+                >
+                  ➕ 添加
+                </button>
+              </div>
+              <KanbanBoard items={kanbanItems} onMove={handleMoveCard} />
             </section>
           ) : (
             <>
@@ -177,6 +198,12 @@ function App() {
           </section>
         </div>
       </main>
+
+      <AddCardModal
+        isOpen={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        onAdd={handleAddCard}
+      />
 
       <footer className="mt-8 text-center text-gray-500 text-sm">
         Wendy's Work Tracker • 
