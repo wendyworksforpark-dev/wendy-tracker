@@ -27,14 +27,22 @@ export async function fetchRawFile(path: string): Promise<string> {
   // Try local public folder first (for IDEAS.md)
   if (path === 'IDEAS.md') {
     const localUrl = `${import.meta.env.BASE_URL}data/ideas.md`
-    const response = await fetch(localUrl)
-    if (response.ok) {
-      return response.text()
+    console.log('Fetching IDEAS.md from:', localUrl)
+    try {
+      const response = await fetch(localUrl)
+      if (response.ok) {
+        const text = await response.text()
+        console.log('Fetched IDEAS.md, length:', text.length)
+        return text
+      }
+    } catch (e) {
+      console.error('Failed to fetch local ideas.md:', e)
     }
   }
   
   // Fallback to GitHub raw (for public repos)
   const url = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/${path}`
+  console.log('Fetching from GitHub:', url)
   const response = await fetch(url)
   if (!response.ok) {
     throw new Error(`Failed to fetch ${path}: ${response.status}`)

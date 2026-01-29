@@ -21,19 +21,24 @@ export function parseIdeasMd(content: string): KanbanItem[] {
   const lines = content.split('\n')
   
   for (const line of lines) {
-    // Detect section headers
-    const headerMatch = line.match(/^##\s+[🌊💡📋✅]\s*(\w+)/i)
-    if (headerMatch) {
-      const key = headerMatch[1].toLowerCase()
-      if (key.includes('brainstorm')) currentStage = 'brainstorm'
-      else if (key.includes('idea')) currentStage = 'idea'
-      else if (key.includes('product')) currentStage = 'product'
-      else if (key.includes('done')) currentStage = 'done'
+    const lowerLine = line.toLowerCase()
+    
+    // Detect section headers - more flexible matching
+    if (line.startsWith('## ')) {
+      if (lowerLine.includes('brainstorm')) {
+        currentStage = 'brainstorm'
+      } else if (lowerLine.includes('idea') && !lowerLine.includes('brainstorm')) {
+        currentStage = 'idea'
+      } else if (lowerLine.includes('product')) {
+        currentStage = 'product'
+      } else if (lowerLine.includes('done') || lowerLine.includes('完成')) {
+        currentStage = 'done'
+      }
       continue
     }
     
     // Parse list items
-    if (currentStage && line.match(/^-\s+/)) {
+    if (currentStage && line.match(/^-\s+\[/)) {
       const itemText = line.replace(/^-\s+/, '').trim()
       
       // Extract date if present [YYYY-MM-DD]
@@ -65,17 +70,14 @@ export function parseTodoMd(content: string): TodoItem[] {
   const lines = content.split('\n')
   
   for (const line of lines) {
-    // Match: - [ ] or - [x] followed by text
     const match = line.match(/^-\s+\[([ x])\]\s+(.+)$/)
     if (match) {
       const done = match[1] === 'x'
       const text = match[2].trim()
       
-      // Extract time if present (HH:MM)
       const timeMatch = text.match(/\((\d{1,2}:\d{2})\)/)
       const time = timeMatch ? timeMatch[1] : undefined
       
-      // Extract priority if present (P0/P1/P2)
       const priorityMatch = text.match(/\[(P[012])\]/)
       const priority = priorityMatch ? priorityMatch[1] : undefined
       
