@@ -2,20 +2,20 @@
   {"id": "feature-1", "title": "🎯 技术指标选股器", "status": "completed"},
   {"id": "feature-2", "title": "📊 板块轮动分析", "status": "completed"},
   {"id": "feature-3", "title": "🔮 相似K线形态匹配", "status": "completed"},
+  {"id": "feature-4", "title": "📰 财经新闻情绪分析", "status": "completed"},
   {
-    "id": "feature-4",
-    "title": "📰 财经新闻情绪分析",
+    "id": "feature-5",
+    "title": "⚡ 异动实时监控系统",
     "status": "in_progress",
-    "priority": 4,
-    "started_at": "2026-01-30T00:38:00+08:00",
+    "priority": 5,
+    "started_at": "2026-01-30T00:47:00+08:00",
     "checklist": [
-      {"item": "设计数据表结构", "done": false},
-      {"item": "实现快讯爬取", "done": false},
-      {"item": "设计情绪分析 prompt", "done": false},
-      {"item": "集成 LLM 分析", "done": false},
-      {"item": "创建 API 端点", "done": false},
+      {"item": "设计异动类型定义", "done": false},
+      {"item": "实现分时数据获取", "done": false},
+      {"item": "实现大单检测", "done": false},
+      {"item": "实现封板/炸板检测", "done": false},
+      {"item": "集成推送系统", "done": false},
       {"item": "测试验证", "done": false}
     ]
-  },
-  {"id": "feature-5", "title": "⚡ 异动实时监控系统", "status": "pending"}
+  }
 ]
