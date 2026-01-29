@@ -22,8 +22,18 @@ export interface CronJob {
   enabled: boolean
 }
 
-// Fetch raw file content from GitHub
+// Fetch raw file content - use local public folder since clawd is private
 export async function fetchRawFile(path: string): Promise<string> {
+  // Try local public folder first (for IDEAS.md)
+  if (path === 'IDEAS.md') {
+    const localUrl = `${import.meta.env.BASE_URL}data/ideas.md`
+    const response = await fetch(localUrl)
+    if (response.ok) {
+      return response.text()
+    }
+  }
+  
+  // Fallback to GitHub raw (for public repos)
   const url = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/${path}`
   const response = await fetch(url)
   if (!response.ok) {
