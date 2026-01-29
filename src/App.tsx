@@ -1,10 +1,14 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import KanbanBoard from './components/KanbanBoard'
 import TodoList from './components/TodoList'
 import CronJobs from './components/CronJobs'
 import CommitLog from './components/CommitLog'
 import IssuesList from './components/IssuesList'
 import AddCardModal from './components/AddCardModal'
+import CardDetail from './components/CardDetail'
+import SearchFilter from './components/SearchFilter'
+import CalendarView from './components/CalendarView'
+import BurndownChart from './components/BurndownChart'
 import { parseIdeasMd } from './data/parser'
 import { fetchRawFile, fetchRecentCommits, fetchIssues, getMockCronJobs } from './lib/github'
 import type { KanbanItem, TodoItem } from './data/parser'
@@ -14,10 +18,12 @@ const SAMPLE_TODOS: TodoItem[] = [
   { id: '1', text: '开盘简报', done: true, time: '09:35' },
   { id: '2', text: '半小时简报', done: true, time: '10:00' },
   { id: '3', text: '半小时简报', done: true, time: '10:30' },
-  { id: '4', text: '半小时简报', done: false, time: '11:00' },
+  { id: '4', text: '半小时简报', done: true, time: '11:00' },
   { id: '5', text: '午间收盘', done: false, time: '11:30' },
   { id: '6', text: '完成 Wendy Tracker 全功能', done: false, priority: 'P0' },
 ]
+
+type TabType = 'kanban' | 'calendar' | 'stats' | 'activity'
 
 function App() {
   const [kanbanItems, setKanbanItems] = useState<KanbanItem[]>([])
@@ -27,13 +33,22 @@ function App() {
   const [issues, setIssues] = useState<any[]>([])
   const [lastUpdate, setLastUpdate] = useState(new Date())
   const [loading, setLoading] = useState(true)
-  const [activeTab, setActiveTab] = useState<'kanban' | 'timeline'>('kanban')
+  const [activeTab, setActiveTab] = useState<TabType>('kanban')
+  
+  // Modals
   const [showAddModal, setShowAddModal] = useState(false)
+  const [selectedCard, setSelectedCard] = useState<KanbanItem | null>(null)
+  
+  // Filters
+  const [searchTerm, setSearchTerm] = useState('')
+  const [stageFilter, setStageFilter] = useState<KanbanItem['stage'] | 'all'>('all')
+  const [showArchived, setShowArchived] = useState(false)
 
   const handleMoveCard = (item: KanbanItem, newStage: KanbanItem['stage']) => {
     setKanbanItems(prev => prev.map(i => 
       i.title === item.title ? { ...i, stage: newStage } : i
     ))
+    setSelectedCard(null)
   }
 
   const handleAddCard = (newItem: Omit<KanbanItem, 'date'>) => {
@@ -41,19 +56,25 @@ function App() {
     setKanbanItems(prev => [...prev, { ...newItem, date: today }])
   }
 
+  const handleDeleteCard = (item: KanbanItem) => {
+    setKanbanItems(prev => prev.filter(i => i.title !== item.title))
+    setSelectedCard(null)
+  }
+
+  const handleCardClick = (item: KanbanItem) => {
+    setSelectedCard(item)
+  }
+
   const loadData = useCallback(async () => {
     setLoading(true)
     try {
-      // Fetch IDEAS.md from GitHub
       const ideasContent = await fetchRawFile('IDEAS.md')
       const items = parseIdeasMd(ideasContent)
       setKanbanItems(items)
       
-      // Fetch commits
       const recentCommits = await fetchRecentCommits(10)
       setCommits(recentCommits)
       
-      // Fetch issues
       const openIssues = await fetchIssues('wendy-tracker')
       setIssues(openIssues)
       
@@ -67,10 +88,44 @@ function App() {
 
   useEffect(() => {
     loadData()
-    // Auto refresh every 5 minutes
     const interval = setInterval(loadData, 5 * 60 * 1000)
     return () => clearInterval(interval)
   }, [loadData])
+
+  // Filtered items
+  const filteredItems = useMemo(() => {
+    return kanbanItems.filter(item => {
+      // Search filter
+      if (searchTerm) {
+        const term = searchTerm.toLowerCase()
+        if (!item.title.toLowerCase().includes(term) && 
+            !item.description?.toLowerCase().includes(term)) {
+          return false
+        }
+      }
+      // Stage filter
+      if (stageFilter !== 'all' && item.stage !== stageFilter) {
+        return false
+      }
+      // Archive filter (done items older than 7 days)
+      if (!showArchived && item.stage === 'done' && item.date) {
+        const itemDate = new Date(item.date)
+        const weekAgo = new Date()
+        weekAgo.setDate(weekAgo.getDate() - 7)
+        if (itemDate < weekAgo) {
+          return false
+        }
+      }
+      return true
+    })
+  }, [kanbanItems, searchTerm, stageFilter, showArchived])
+
+  const tabs = [
+    { key: 'kanban' as const, label: '📋 看板' },
+    { key: 'calendar' as const, label: '📅 日历' },
+    { key: 'stats' as const, label: '📊 统计' },
+    { key: 'activity' as const, label: '⚡ 活动' },
+  ]
 
   return (
     <div className="min-h-screen p-4 md:p-6 max-w-7xl mx-auto">
@@ -81,7 +136,7 @@ function App() {
         </h1>
         <div className="flex items-center gap-4">
           <span className="text-gray-400 text-sm">
-            更新: {lastUpdate.toLocaleTimeString('zh-CN')}
+            {lastUpdate.toLocaleTimeString('zh-CN')}
           </span>
           <button 
             onClick={loadData}
@@ -94,41 +149,36 @@ function App() {
         </div>
       </header>
 
-      {/* Cron Jobs Status */}
+      {/* Cron Jobs */}
       <section className="mb-6">
         <h2 className="text-lg font-semibold mb-3 flex items-center gap-2">
           ⏰ 定时任务
           <span className="text-sm text-gray-400 font-normal">
-            (今日 {cronJobs.filter(j => j.lastStatus === 'ok').length}/{cronJobs.length})
+            ({cronJobs.filter(j => j.lastStatus === 'ok').length}/{cronJobs.length})
           </span>
         </h2>
         <CronJobs jobs={cronJobs} />
       </section>
 
       {/* Tabs */}
-      <div className="flex gap-2 mb-4">
-        <button
-          onClick={() => setActiveTab('kanban')}
-          className={`px-4 py-2 rounded-lg transition ${
-            activeTab === 'kanban' ? 'bg-blue-600' : 'bg-gray-700 hover:bg-gray-600'
-          }`}
-        >
-          📋 看板
-        </button>
-        <button
-          onClick={() => setActiveTab('timeline')}
-          className={`px-4 py-2 rounded-lg transition ${
-            activeTab === 'timeline' ? 'bg-blue-600' : 'bg-gray-700 hover:bg-gray-600'
-          }`}
-        >
-          📊 活动
-        </button>
+      <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
+        {tabs.map(tab => (
+          <button
+            key={tab.key}
+            onClick={() => setActiveTab(tab.key)}
+            className={`px-4 py-2 rounded-lg transition whitespace-nowrap ${
+              activeTab === tab.key ? 'bg-blue-600' : 'bg-gray-700 hover:bg-gray-600'
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
       </div>
 
       <main className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-6">
-          {activeTab === 'kanban' ? (
+          {activeTab === 'kanban' && (
             <section>
               <div className="flex justify-between items-center mb-3">
                 <h2 className="text-lg font-semibold">📋 想法管道</h2>
@@ -139,9 +189,37 @@ function App() {
                   ➕ 添加
                 </button>
               </div>
-              <KanbanBoard items={kanbanItems} onMove={handleMoveCard} />
+              <SearchFilter
+                searchTerm={searchTerm}
+                onSearchChange={setSearchTerm}
+                stageFilter={stageFilter}
+                onStageFilterChange={setStageFilter}
+                showArchived={showArchived}
+                onShowArchivedChange={setShowArchived}
+              />
+              <KanbanBoard 
+                items={filteredItems} 
+                onMove={handleMoveCard}
+                onCardClick={handleCardClick}
+              />
             </section>
-          ) : (
+          )}
+
+          {activeTab === 'calendar' && (
+            <section>
+              <h2 className="text-lg font-semibold mb-3">📅 日历视图</h2>
+              <CalendarView items={kanbanItems} />
+            </section>
+          )}
+
+          {activeTab === 'stats' && (
+            <section>
+              <h2 className="text-lg font-semibold mb-3">📊 统计分析</h2>
+              <BurndownChart items={kanbanItems} />
+            </section>
+          )}
+
+          {activeTab === 'activity' && (
             <>
               <section>
                 <h2 className="text-lg font-semibold mb-3">📝 最近提交</h2>
@@ -199,10 +277,19 @@ function App() {
         </div>
       </main>
 
+      {/* Modals */}
       <AddCardModal
         isOpen={showAddModal}
         onClose={() => setShowAddModal(false)}
         onAdd={handleAddCard}
+      />
+
+      <CardDetail
+        item={selectedCard}
+        isOpen={!!selectedCard}
+        onClose={() => setSelectedCard(null)}
+        onMove={(stage) => selectedCard && handleMoveCard(selectedCard, stage)}
+        onDelete={() => selectedCard && handleDeleteCard(selectedCard)}
       />
 
       <footer className="mt-8 text-center text-gray-500 text-sm">

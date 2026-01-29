@@ -21,6 +21,7 @@ import type { KanbanItem } from '../data/parser'
 interface Props {
   items: KanbanItem[]
   onMove?: (item: KanbanItem, newStage: KanbanItem['stage']) => void
+  onCardClick?: (item: KanbanItem) => void
 }
 
 const COLUMNS = [
@@ -33,9 +34,10 @@ const COLUMNS = [
 interface KanbanCardProps {
   item: KanbanItem
   index: number
+  onClick?: () => void
 }
 
-function KanbanCard({ item, index }: KanbanCardProps) {
+function KanbanCard({ item, index, onClick }: KanbanCardProps) {
   const {
     attributes,
     listeners,
@@ -57,6 +59,7 @@ function KanbanCard({ item, index }: KanbanCardProps) {
       style={style}
       {...attributes}
       {...listeners}
+      onClick={onClick}
       className="bg-gray-800 rounded-lg p-3 text-sm hover:bg-gray-700 transition cursor-grab active:cursor-grabbing shadow-lg"
     >
       <div className="font-medium">{item.title}</div>
@@ -72,10 +75,12 @@ function KanbanCard({ item, index }: KanbanCardProps) {
 
 function DroppableColumn({ 
   column, 
-  items 
+  items,
+  onCardClick 
 }: { 
   column: typeof COLUMNS[0]
-  items: KanbanItem[] 
+  items: KanbanItem[]
+  onCardClick?: (item: KanbanItem) => void
 }) {
   const colItems = items.filter(i => i.stage === column.key)
   const itemIds = colItems.map((_, idx) => `${column.key}-${idx}`)
@@ -89,7 +94,12 @@ function DroppableColumn({
       <SortableContext items={itemIds} strategy={verticalListSortingStrategy}>
         <div className="space-y-2">
           {colItems.map((item, idx) => (
-            <KanbanCard key={`${column.key}-${idx}`} item={item} index={idx} />
+            <KanbanCard 
+              key={`${column.key}-${idx}`} 
+              item={item} 
+              index={idx} 
+              onClick={() => onCardClick?.(item)}
+            />
           ))}
           {colItems.length === 0 && (
             <div className="text-gray-500 text-sm italic p-4 text-center border-2 border-dashed border-gray-600 rounded-lg">
@@ -102,7 +112,7 @@ function DroppableColumn({
   )
 }
 
-export default function KanbanBoard({ items, onMove }: Props) {
+export default function KanbanBoard({ items, onMove, onCardClick }: Props) {
   const [activeItem, setActiveItem] = useState<KanbanItem | null>(null)
 
   const sensors = useSensors(
@@ -159,7 +169,7 @@ export default function KanbanBoard({ items, onMove }: Props) {
     >
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {COLUMNS.map(col => (
-          <DroppableColumn key={col.key} column={col} items={items} />
+          <DroppableColumn key={col.key} column={col} items={items} onCardClick={onCardClick} />
         ))}
       </div>
       
