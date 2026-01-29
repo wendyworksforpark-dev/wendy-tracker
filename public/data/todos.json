@@ -1,46 +1,13 @@
 [
-  {
-    "id": "feature-1",
-    "title": "🎯 技术指标选股器",
-    "status": "completed",
-    "priority": 1,
-    "github_issue": "https://github.com/zinan92/ashare/issues/14",
-    "completed_at": "2026-01-30T00:28:00+08:00",
-    "checklist": [
-      {"item": "设计数据表结构", "done": true},
-      {"item": "实现 MA 计算", "done": true},
-      {"item": "实现 MACD 计算", "done": true},
-      {"item": "实现 RSI 计算", "done": true},
-      {"item": "实现布林带计算", "done": true},
-      {"item": "创建选股规则引擎", "done": true},
-      {"item": "实现金叉筛选", "done": true},
-      {"item": "创建 API 端点", "done": true},
-      {"item": "计算自选股指标", "done": true},
-      {"item": "测试验证", "done": true}
-    ]
-  },
-  {
-    "id": "feature-2",
-    "title": "📊 板块轮动分析",
-    "status": "in_progress",
-    "priority": 2,
-    "github_issue": "https://github.com/zinan92/ashare/issues/15",
-    "started_at": "2026-01-30T00:28:00+08:00",
-    "checklist": [
-      {"item": "设计数据表结构", "done": false},
-      {"item": "收集板块资金流向历史", "done": false},
-      {"item": "计算板块相对强弱", "done": false},
-      {"item": "实现轮动信号检测", "done": false},
-      {"item": "创建 API 端点", "done": false},
-      {"item": "测试验证", "done": false}
-    ]
-  },
+  {"id": "feature-1", "title": "🎯 技术指标选股器", "status": "completed", "priority": 1},
+  {"id": "feature-2", "title": "📊 板块轮动分析", "status": "completed", "priority": 2},
   {
     "id": "feature-3",
     "title": "🔮 相似K线形态匹配",
-    "status": "pending",
+    "status": "in_progress",
     "priority": 3,
     "github_issue": "https://github.com/zinan92/ashare/issues/16",
+    "started_at": "2026-01-30T00:32:00+08:00",
     "checklist": [
       {"item": "研究形态匹配算法", "done": false},
       {"item": "实现 K 线特征提取", "done": false},
@@ -50,34 +17,6 @@
       {"item": "测试验证", "done": false}
     ]
   },
-  {
-    "id": "feature-4",
-    "title": "📰 财经新闻情绪分析",
-    "status": "pending",
-    "priority": 4,
-    "github_issue": "https://github.com/zinan92/ashare/issues/17",
-    "checklist": [
-      {"item": "设计数据表结构", "done": false},
-      {"item": "实现快讯爬取", "done": false},
-      {"item": "设计情绪分析 prompt", "done": false},
-      {"item": "集成 LLM 分析", "done": false},
-      {"item": "创建 API 端点", "done": false},
-      {"item": "测试验证", "done": false}
-    ]
-  },
-  {
-    "id": "feature-5",
-    "title": "⚡ 异动实时监控系统",
-    "status": "pending",
-    "priority": 5,
-    "github_issue": "https://github.com/zinan92/ashare/issues/18",
-    "checklist": [
-      {"item": "设计异动类型定义", "done": false},
-      {"item": "实现分时数据获取", "done": false},
-      {"item": "实现大单检测", "done": false},
-      {"item": "实现封板/炸板检测", "done": false},
-      {"item": "集成推送系统", "done": false},
-      {"item": "测试验证", "done": false}
-    ]
-  }
+  {"id": "feature-4", "title": "📰 财经新闻情绪分析", "status": "pending", "priority": 4},
+  {"id": "feature-5", "title": "⚡ 异动实时监控系统", "status": "pending", "priority": 5}
 ]
