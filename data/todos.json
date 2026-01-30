@@ -108,21 +108,25 @@
     "id": "fix-frontend-errors",
     "title": "🐛 修复前端首页4个API报错",
     "type": "build",
-    "stage": "in_progress",
-    "status": "in_progress",
+    "stage": "done",
+    "status": "completed",
     "github_issue": 24,
     "repo": "ashare",
-    "created_at": "2026-01-30T16:45:00+08:00"
+    "description": "4个API修复: concepts/categories返回空数组, monitor返回空数据, index支持sina格式反向解析",
+    "created_at": "2026-01-30T16:45:00+08:00",
+    "completed_at": "2026-01-30T23:30:00+08:00"
   },
   {
     "id": "data-consistency",
     "title": "🔧 数据更新一致性保障机制",
     "type": "build",
-    "stage": "in_progress",
-    "status": "in_progress",
+    "stage": "done",
+    "status": "completed",
     "github_issue": 25,
     "repo": "ashare",
-    "created_at": "2026-01-30T16:45:00+08:00"
+    "description": "/api/status/data-freshness端点: 返回各数据源最后更新时间+文件状态+健康检查",
+    "created_at": "2026-01-30T16:45:00+08:00",
+    "completed_at": "2026-01-30T23:30:00+08:00"
   },
   {
     "id": "momentum-notification",
