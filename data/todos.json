@@ -3,6 +3,7 @@
     "id": "feature-1",
     "title": "🎯 技术指标选股器",
     "type": "build",
+    "stage": "done",
     "status": "completed",
     "completed_at": "2026-01-30T00:28:00+08:00"
   },
@@ -10,6 +11,7 @@
     "id": "feature-2",
     "title": "📊 板块轮动分析",
     "type": "build",
+    "stage": "done",
     "status": "completed",
     "completed_at": "2026-01-30T00:32:00+08:00"
   },
@@ -17,6 +19,7 @@
     "id": "feature-3",
     "title": "🔮 相似K线形态匹配",
     "type": "build",
+    "stage": "done",
     "status": "completed",
     "completed_at": "2026-01-30T00:38:00+08:00"
   },
@@ -24,6 +27,7 @@
     "id": "feature-4",
     "title": "📰 财经新闻情绪分析",
     "type": "build",
+    "stage": "done",
     "status": "completed",
     "completed_at": "2026-01-30T00:47:00+08:00"
   },
@@ -31,6 +35,7 @@
     "id": "feature-5",
     "title": "⚡ 异动实时监控系统",
     "type": "build",
+    "stage": "done",
     "status": "completed",
     "completed_at": "2026-01-30T01:05:00+08:00"
   },
@@ -38,6 +43,7 @@
     "id": "feature-6",
     "title": "🇺🇸 美股板块扩展 — 16赛道+板块ETF+Mag7",
     "type": "build",
+    "stage": "done",
     "status": "completed",
     "github_issue": 19,
     "repo": "ashare",
@@ -48,6 +54,7 @@
     "id": "feature-7",
     "title": "📦 期货商品+美债+美元指数追踪",
     "type": "build",
+    "stage": "done",
     "status": "completed",
     "github_issue": 20,
     "repo": "ashare",
@@ -58,6 +65,7 @@
     "id": "feature-8",
     "title": "📰 英文财经快讯 RSS 接入",
     "type": "build",
+    "stage": "done",
     "status": "completed",
     "github_issue": 21,
     "repo": "ashare",
@@ -68,6 +76,7 @@
     "id": "feature-9",
     "title": "📅 美股经济日历",
     "type": "build",
+    "stage": "done",
     "status": "completed",
     "github_issue": 22,
     "repo": "ashare",
@@ -78,6 +87,7 @@
     "id": "feature-10",
     "title": "🔄 Tracker 重构 — 双维度分类 + 全量 Issues",
     "type": "build",
+    "stage": "done",
     "status": "completed",
     "github_issue": 23,
     "repo": "ashare",
@@ -88,9 +98,40 @@
     "id": "notion-deep-read",
     "title": "📖 Notion全量阅读 → PARK_BRAIN.md",
     "type": "research",
+    "stage": "done",
     "status": "completed",
     "started_at": "2026-01-30T14:52:00+08:00",
     "description": "读完Park的100+页Notion笔记，提取交易哲学/策略/教训，整理成结构化知识库",
     "completed_at": "2026-01-30T15:15:00+08:00"
+  },
+  {
+    "id": "fix-frontend-errors",
+    "title": "🐛 修复前端首页4个API报错",
+    "type": "build",
+    "stage": "in_progress",
+    "status": "in_progress",
+    "github_issue": 24,
+    "repo": "ashare",
+    "created_at": "2026-01-30T16:45:00+08:00"
+  },
+  {
+    "id": "data-consistency",
+    "title": "🔧 数据更新一致性保障机制",
+    "type": "build",
+    "stage": "in_progress",
+    "status": "in_progress",
+    "github_issue": 25,
+    "repo": "ashare",
+    "created_at": "2026-01-30T16:45:00+08:00"
+  },
+  {
+    "id": "momentum-notification",
+    "title": "🔔 动量信号推送通知",
+    "type": "build",
+    "stage": "done",
+    "status": "completed",
+    "description": "盘中每2分钟检查动量信号（上涨激增/K线形态），新信号自动推送Telegram",
+    "created_at": "2026-01-30T17:58:00+08:00",
+    "completed_at": "2026-01-30T18:00:00+08:00"
   }
 ]
