@@ -14,6 +14,8 @@ export interface TodoItem {
   done: boolean
   time?: string
   priority?: string
+  type?: 'idea' | 'research' | 'build'
+  status?: 'completed' | 'in_progress' | 'pending'
 }
 
 export function parseIdeasMd(content: string): KanbanItem[] {

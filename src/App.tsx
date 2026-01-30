@@ -78,6 +78,8 @@ function App() {
               })
             : undefined,
           priority: t.github_issue ? `#${t.github_issue}` : undefined,
+          type: t.type || 'build',
+          status: t.status || 'pending',
         }))
         setTodos(mapped)
       }
@@ -301,51 +303,51 @@ function App() {
                 <div className="text-xs text-gray-400">待完成</div>
               </div>
             </div>
-            {/* Type breakdown */}
+            {/* Type breakdown — from today's todos */}
             <div className="mt-3 pt-3 border-t border-gray-700">
               <div className="text-xs text-gray-400 mb-2">类型</div>
               <div className="grid grid-cols-3 gap-2 text-center">
                 <div>
                   <div className="text-lg font-bold text-yellow-400">
-                    {kanbanItems.filter(i => i.type === 'idea').length}
+                    {todos.filter(t => t.type === 'idea').length}
                   </div>
                   <div className="text-xs text-gray-400">💡 Ideas</div>
                 </div>
                 <div>
                   <div className="text-lg font-bold text-purple-400">
-                    {kanbanItems.filter(i => i.type === 'research').length}
+                    {todos.filter(t => t.type === 'research').length}
                   </div>
                   <div className="text-xs text-gray-400">🔍 Research</div>
                 </div>
                 <div>
                   <div className="text-lg font-bold text-blue-400">
-                    {kanbanItems.filter(i => i.type === 'build').length}
+                    {todos.filter(t => t.type === 'build').length}
                   </div>
                   <div className="text-xs text-gray-400">🛠️ Build</div>
                 </div>
               </div>
             </div>
-            {/* Stage breakdown */}
+            {/* Stage breakdown — from today's todos */}
             <div className="mt-3 pt-3 border-t border-gray-700">
               <div className="text-xs text-gray-400 mb-2">阶段</div>
               <div className="grid grid-cols-3 gap-2 text-center">
                 <div>
                   <div className="text-lg font-bold">
-                    {kanbanItems.filter(i => i.stage === 'backlog').length}
+                    {todos.filter(t => t.status === 'pending').length}
                   </div>
-                  <div className="text-xs text-gray-400">⬜ Backlog</div>
+                  <div className="text-xs text-gray-400">⬜ 待处理</div>
                 </div>
                 <div>
                   <div className="text-lg font-bold text-blue-400">
-                    {kanbanItems.filter(i => i.stage === 'in_progress').length}
+                    {todos.filter(t => t.status === 'in_progress').length}
                   </div>
                   <div className="text-xs text-gray-400">🔵 进行中</div>
                 </div>
                 <div>
                   <div className="text-lg font-bold text-green-400">
-                    {kanbanItems.filter(i => i.stage === 'done').length}
+                    {todos.filter(t => t.status === 'completed').length}
                   </div>
-                  <div className="text-xs text-gray-400">✅ Done</div>
+                  <div className="text-xs text-gray-400">✅ 已完成</div>
                 </div>
               </div>
             </div>
