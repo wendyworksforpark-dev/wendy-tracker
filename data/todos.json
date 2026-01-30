@@ -87,8 +87,9 @@
     "id": "notion-deep-read",
     "title": "📖 Notion全量阅读 → PARK_BRAIN.md",
     "type": "research",
-    "status": "in_progress",
+    "status": "completed",
     "started_at": "2026-01-30T14:52:00+08:00",
-    "description": "读完Park的100+页Notion笔记，提取交易哲学/策略/教训，整理成结构化知识库"
+    "description": "读完Park的100+页Notion笔记，提取交易哲学/策略/教训，整理成结构化知识库",
+    "completed_at": "2026-01-30T15:15:00+08:00"
   }
 ]
