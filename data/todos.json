@@ -133,5 +133,15 @@
     "description": "盘中每2分钟检查动量信号（上涨激增/K线形态），新信号自动推送Telegram",
     "created_at": "2026-01-30T17:58:00+08:00",
     "completed_at": "2026-01-30T18:00:00+08:00"
+  },
+  {
+    "id": "tracker-redesign",
+    "title": "Tracker 全面重设计 — Linear/Monday.com 风格",
+    "type": "build",
+    "stage": "done",
+    "status": "completed",
+    "description": "Light theme + Sidebar导航 + Lucide icons + 专业配色 + 全部10个组件重写",
+    "created_at": "2026-01-30T18:24:00+08:00",
+    "completed_at": "2026-01-30T18:35:00+08:00"
   }
 ]
