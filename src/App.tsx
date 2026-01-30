@@ -14,14 +14,7 @@ import { fetchRawFile, fetchRecentCommits, fetchIssues, fetchCronStatus } from '
 import type { KanbanItem, TodoItem } from './data/parser'
 import type { GitHubCommit, CronJob } from './lib/github'
 
-const SAMPLE_TODOS: TodoItem[] = [
-  { id: '1', text: '开盘简报', done: true, time: '09:35' },
-  { id: '2', text: '半小时简报', done: true, time: '10:00' },
-  { id: '3', text: '半小时简报', done: true, time: '10:30' },
-  { id: '4', text: '半小时简报', done: true, time: '11:00' },
-  { id: '5', text: '午间收盘', done: false, time: '11:30' },
-  { id: '6', text: '完成 Wendy Tracker 全功能', done: false, priority: 'P0' },
-]
+const SAMPLE_TODOS: TodoItem[] = []
 
 type TabType = 'kanban' | 'calendar' | 'stats' | 'activity'
 
@@ -80,7 +73,25 @@ function App() {
       
       const cronStatus = await fetchCronStatus()
       setCronJobs(cronStatus)
-      
+
+      // Fetch todos from todos.json
+      try {
+        const todosResp = await fetch('./data/todos.json')
+        if (todosResp.ok) {
+          const todosData = await todosResp.json()
+          const mapped: TodoItem[] = todosData.map((t: any) => ({
+            id: t.id,
+            text: t.title,
+            done: t.status === 'completed',
+            time: t.completed_at ? new Date(t.completed_at).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }) : undefined,
+            priority: t.github_issue ? `#${t.github_issue}` : undefined,
+          }))
+          setTodos(mapped)
+        }
+      } catch (e) {
+        console.error('Failed to load todos:', e)
+      }
+
       setLastUpdate(new Date())
     } catch (error) {
       console.error('Failed to load data:', error)
