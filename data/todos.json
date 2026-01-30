@@ -187,5 +187,62 @@
     "description": "统一信号接口+EMA/RSI/MACD/布林/ATR技术指标+ashare预留接口+sentiment预留",
     "completed_at": "2026-01-30T22:13:00+08:00",
     "created_at": "2026-01-30T21:24:00+08:00"
+  },
+  {
+    "id": "us-briefing-upgrade",
+    "title": "美股简报升级 v2 — 完整版模板",
+    "type": "build",
+    "stage": "done",
+    "status": "completed",
+    "description": "从三个数字升级为：指数+板块排名+Mag7+中概+商品+快讯+经济日历",
+    "created_at": "2026-01-30T23:48:00+08:00",
+    "completed_at": "2026-01-30T23:50:00+08:00"
+  },
+  {
+    "id": "frontend-refactor",
+    "title": "前端重构：两页合一 + 精简指数数据",
+    "type": "build",
+    "stage": "backlog",
+    "status": "pending",
+    "github_issue": 26,
+    "repo": "ashare",
+    "description": "两页面合并为自选股页面，删除冗余概念板块模块，需要安装react-router",
+    "created_at": "2026-01-30T09:20:00+08:00"
+  },
+  {
+    "id": "backtest-engine",
+    "title": "回测引擎",
+    "type": "build",
+    "stage": "backlog",
+    "status": "pending",
+    "description": "ashare新模块，支持策略回测+结果可视化",
+    "created_at": "2026-01-30T15:05:00+08:00"
+  },
+  {
+    "id": "portfolio-dashboard",
+    "title": "自选股组合分析仪表盘",
+    "type": "build",
+    "stage": "backlog",
+    "status": "pending",
+    "description": "自选股组合收益/风险/相关性分析",
+    "created_at": "2026-01-30T15:05:00+08:00"
+  },
+  {
+    "id": "smart-review",
+    "title": "智能复盘生成器",
+    "type": "build",
+    "stage": "backlog",
+    "status": "pending",
+    "description": "每日自动生成交易复盘报告",
+    "created_at": "2026-01-30T15:05:00+08:00"
+  },
+  {
+    "id": "sina-lazy-load",
+    "title": "新浪K线懒加载+退避策略",
+    "type": "build",
+    "stage": "backlog",
+    "status": "pending",
+    "description": "解决新浪限流问题：懒加载+指数退避+增量更新+备用数据源",
+    "created_at": "2026-01-30T10:00:00+08:00"
   }
 ]
