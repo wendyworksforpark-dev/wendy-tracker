@@ -143,5 +143,42 @@
     "description": "Light theme + Sidebar导航 + Lucide icons + 专业配色 + 全部10个组件重写",
     "created_at": "2026-01-30T18:24:00+08:00",
     "completed_at": "2026-01-30T18:35:00+08:00"
+  },
+  {
+    "id": "trading-agents-research",
+    "title": "Polymarket + Hyperliquid API 研究",
+    "type": "research",
+    "stage": "done",
+    "status": "completed",
+    "description": "研究两个平台的API架构、Python SDK、交易接入方式，输出完整技术报告",
+    "created_at": "2026-01-30T21:19:00+08:00",
+    "completed_at": "2026-01-30T21:24:00+08:00"
+  },
+  {
+    "id": "hyperliquid-agent",
+    "title": "Hyperliquid 交易 Agent — rita CTA 策略移植",
+    "type": "build",
+    "stage": "backlog",
+    "status": "pending",
+    "description": "在Hyperliquid测试网上跑rita CTA策略，4h趋势+小级别入场，AI agent 24/7执行",
+    "created_at": "2026-01-30T21:24:00+08:00"
+  },
+  {
+    "id": "polymarket-agent",
+    "title": "Polymarket 事件套利 Agent — 新闻sentiment驱动",
+    "type": "build",
+    "stage": "backlog",
+    "status": "pending",
+    "description": "接入Polymarket只读API+CLOB，用新闻sentiment+数据库信号发现mispricing",
+    "created_at": "2026-01-30T21:24:00+08:00"
+  },
+  {
+    "id": "signal-engine",
+    "title": "Signal Engine — 统一交易信号层",
+    "type": "build",
+    "stage": "backlog",
+    "status": "pending",
+    "description": "把ashare数据库+新闻+技术面统一为可消费的信号API，供各交易agent使用",
+    "created_at": "2026-01-30T21:24:00+08:00"
   }
 ]
