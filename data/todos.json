@@ -1,0 +1,11 @@
+[
+  {"id": "feature-1", "title": "🎯 技术指标选股器", "status": "completed", "completed_at": "2026-01-30T00:28:00+08:00"},
+  {"id": "feature-2", "title": "📊 板块轮动分析", "status": "completed", "completed_at": "2026-01-30T00:32:00+08:00"},
+  {"id": "feature-3", "title": "🔮 相似K线形态匹配", "status": "completed", "completed_at": "2026-01-30T00:38:00+08:00"},
+  {"id": "feature-4", "title": "📰 财经新闻情绪分析", "status": "completed", "completed_at": "2026-01-30T00:47:00+08:00"},
+  {"id": "feature-5", "title": "⚡ 异动实时监控系统", "status": "completed", "completed_at": "2026-01-30T01:05:00+08:00"},
+  {"id": "feature-6", "title": "🇺🇸 美股板块扩展 — 16赛道+板块ETF+Mag7", "status": "completed", "github_issue": 19, "created_at": "2026-01-30T09:23:00+08:00", "completed_at": "2026-01-30T09:32:00+08:00"},
+  {"id": "feature-7", "title": "📦 期货商品+美债+美元指数追踪", "status": "completed", "github_issue": 20, "created_at": "2026-01-30T09:23:00+08:00", "completed_at": "2026-01-30T09:32:00+08:00"},
+  {"id": "feature-8", "title": "📰 英文财经快讯 RSS 接入", "status": "completed", "github_issue": 21, "created_at": "2026-01-30T09:23:00+08:00", "completed_at": "2026-01-30T09:32:00+08:00"},
+  {"id": "feature-9", "title": "📅 美股经济日历", "status": "completed", "github_issue": 22, "created_at": "2026-01-30T09:23:00+08:00", "completed_at": "2026-01-30T09:32:00+08:00"}
+]
