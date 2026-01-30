@@ -110,12 +110,11 @@ export default function CalendarView({ items }: Props) {
                     key={i}
                     className={`text-xs truncate px-1 rounded ${
                       item.stage === 'done' ? 'bg-green-900/50 text-green-300' :
-                      item.stage === 'product' ? 'bg-blue-900/50 text-blue-300' :
-                      item.stage === 'idea' ? 'bg-yellow-900/50 text-yellow-300' :
-                      'bg-purple-900/50 text-purple-300'
+                      item.stage === 'in_progress' ? 'bg-blue-900/50 text-blue-300' :
+                      'bg-gray-700/50 text-gray-300'
                     }`}
                   >
-                    {item.title}
+                    {item.type === 'idea' ? '💡' : item.type === 'research' ? '🔍' : '🛠️'} {item.title}
                   </div>
                 ))}
                 {dayItems.length > 2 && (

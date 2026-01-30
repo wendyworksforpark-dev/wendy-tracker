@@ -10,9 +10,9 @@ import SearchFilter from './components/SearchFilter'
 import CalendarView from './components/CalendarView'
 import BurndownChart from './components/BurndownChart'
 import { parseIdeasMd } from './data/parser'
-import { fetchRawFile, fetchRecentCommits, fetchIssues, fetchCronStatus } from './lib/github'
+import { fetchRawFile, fetchRecentCommits, fetchCronStatus, fetchAllRepoIssues } from './lib/github'
 import type { KanbanItem, TodoItem } from './data/parser'
-import type { GitHubCommit, CronJob } from './lib/github'
+import type { GitHubCommit, CronJob, RepoIssues } from './lib/github'
 
 const SAMPLE_TODOS: TodoItem[] = []
 
@@ -23,24 +23,25 @@ function App() {
   const [todos, setTodos] = useState<TodoItem[]>(SAMPLE_TODOS)
   const [cronJobs, setCronJobs] = useState<CronJob[]>([])
   const [commits, setCommits] = useState<GitHubCommit[]>([])
-  const [issues, setIssues] = useState<any[]>([])
+  const [repoIssues, setRepoIssues] = useState<RepoIssues[]>([])
   const [lastUpdate, setLastUpdate] = useState(new Date())
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<TabType>('kanban')
-  
+
   // Modals
   const [showAddModal, setShowAddModal] = useState(false)
   const [selectedCard, setSelectedCard] = useState<KanbanItem | null>(null)
-  
+
   // Filters
   const [searchTerm, setSearchTerm] = useState('')
   const [stageFilter, setStageFilter] = useState<KanbanItem['stage'] | 'all'>('all')
+  const [typeFilter, setTypeFilter] = useState<KanbanItem['type'] | 'all'>('all')
   const [showArchived, setShowArchived] = useState(false)
 
   const handleMoveCard = (item: KanbanItem, newStage: KanbanItem['stage']) => {
-    setKanbanItems(prev => prev.map(i => 
-      i.title === item.title ? { ...i, stage: newStage } : i
-    ))
+    setKanbanItems(prev =>
+      prev.map(i => (i.title === item.title ? { ...i, stage: newStage } : i))
+    )
     setSelectedCard(null)
   }
 
@@ -61,7 +62,7 @@ function App() {
   const loadData = useCallback(async () => {
     setLoading(true)
 
-    // Fetch todos first — independent, never fails silently
+    // Fetch todos
     try {
       const todosResp = await fetch('./data/todos.json')
       if (todosResp.ok) {
@@ -70,7 +71,12 @@ function App() {
           id: t.id,
           text: t.title,
           done: t.status === 'completed',
-          time: t.completed_at ? new Date(t.completed_at).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }) : undefined,
+          time: t.completed_at
+            ? new Date(t.completed_at).toLocaleTimeString('zh-CN', {
+                hour: '2-digit',
+                minute: '2-digit',
+              })
+            : undefined,
           priority: t.github_issue ? `#${t.github_issue}` : undefined,
         }))
         setTodos(mapped)
@@ -83,22 +89,30 @@ function App() {
     try {
       const ideasContent = await fetchRawFile('IDEAS.md')
       setKanbanItems(parseIdeasMd(ideasContent))
-    } catch (e) { console.error('Failed to load ideas:', e) }
+    } catch (e) {
+      console.error('Failed to load ideas:', e)
+    }
 
     // Commits
     try {
       setCommits(await fetchRecentCommits(10))
-    } catch (e) { console.error('Failed to load commits:', e) }
+    } catch (e) {
+      console.error('Failed to load commits:', e)
+    }
 
-    // Issues
+    // Issues — all repos, open + closed
     try {
-      setIssues(await fetchIssues('wendy-tracker'))
-    } catch (e) { console.error('Failed to load issues:', e) }
+      setRepoIssues(await fetchAllRepoIssues())
+    } catch (e) {
+      console.error('Failed to load issues:', e)
+    }
 
     // Cron
     try {
       setCronJobs(await fetchCronStatus())
-    } catch (e) { console.error('Failed to load cron:', e) }
+    } catch (e) {
+      console.error('Failed to load cron:', e)
+    }
 
     setLastUpdate(new Date())
     setLoading(false)
@@ -116,13 +130,19 @@ function App() {
       // Search filter
       if (searchTerm) {
         const term = searchTerm.toLowerCase()
-        if (!item.title.toLowerCase().includes(term) && 
-            !item.description?.toLowerCase().includes(term)) {
+        if (
+          !item.title.toLowerCase().includes(term) &&
+          !item.description?.toLowerCase().includes(term)
+        ) {
           return false
         }
       }
       // Stage filter
       if (stageFilter !== 'all' && item.stage !== stageFilter) {
+        return false
+      }
+      // Type filter
+      if (typeFilter !== 'all' && item.type !== typeFilter) {
         return false
       }
       // Archive filter (done items older than 7 days)
@@ -136,7 +156,7 @@ function App() {
       }
       return true
     })
-  }, [kanbanItems, searchTerm, stageFilter, showArchived])
+  }, [kanbanItems, searchTerm, stageFilter, typeFilter, showArchived])
 
   const tabs = [
     { key: 'kanban' as const, label: '📋 看板' },
@@ -156,7 +176,7 @@ function App() {
           <span className="text-gray-400 text-sm">
             {lastUpdate.toLocaleTimeString('zh-CN')}
           </span>
-          <button 
+          <button
             onClick={loadData}
             disabled={loading}
             className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 rounded-lg transition flex items-center gap-2"
@@ -212,11 +232,13 @@ function App() {
                 onSearchChange={setSearchTerm}
                 stageFilter={stageFilter}
                 onStageFilterChange={setStageFilter}
+                typeFilter={typeFilter}
+                onTypeFilterChange={setTypeFilter}
                 showArchived={showArchived}
                 onShowArchivedChange={setShowArchived}
               />
-              <KanbanBoard 
-                items={filteredItems} 
+              <KanbanBoard
+                items={filteredItems}
                 onMove={handleMoveCard}
                 onCardClick={handleCardClick}
               />
@@ -245,7 +267,7 @@ function App() {
               </section>
               <section>
                 <h2 className="text-lg font-semibold mb-3">🎯 GitHub Issues</h2>
-                <IssuesList issues={issues} loading={loading} />
+                <IssuesList repoIssues={repoIssues} loading={loading} />
               </section>
             </>
           )}
@@ -255,14 +277,14 @@ function App() {
         <div className="space-y-6">
           <section>
             <h2 className="text-lg font-semibold mb-3">📌 今日任务</h2>
-            <TodoList 
-              items={todos} 
-              onToggle={(id) => {
-                setTodos(todos.map(t => t.id === id ? {...t, done: !t.done} : t))
-              }} 
+            <TodoList
+              items={todos}
+              onToggle={id => {
+                setTodos(todos.map(t => (t.id === id ? { ...t, done: !t.done } : t)))
+              }}
             />
           </section>
-          
+
           <section className="bg-gray-800 rounded-lg p-4">
             <h3 className="font-semibold mb-2">📊 今日统计</h3>
             <div className="grid grid-cols-2 gap-4 text-center">
@@ -278,17 +300,53 @@ function App() {
                 </div>
                 <div className="text-xs text-gray-400">待完成</div>
               </div>
-              <div>
-                <div className="text-2xl font-bold text-blue-400">
-                  {kanbanItems.filter(i => i.stage === 'product').length}
+            </div>
+            {/* Type breakdown */}
+            <div className="mt-3 pt-3 border-t border-gray-700">
+              <div className="text-xs text-gray-400 mb-2">类型</div>
+              <div className="grid grid-cols-3 gap-2 text-center">
+                <div>
+                  <div className="text-lg font-bold text-yellow-400">
+                    {kanbanItems.filter(i => i.type === 'idea').length}
+                  </div>
+                  <div className="text-xs text-gray-400">💡 Ideas</div>
                 </div>
-                <div className="text-xs text-gray-400">进行中</div>
+                <div>
+                  <div className="text-lg font-bold text-purple-400">
+                    {kanbanItems.filter(i => i.type === 'research').length}
+                  </div>
+                  <div className="text-xs text-gray-400">🔍 Research</div>
+                </div>
+                <div>
+                  <div className="text-lg font-bold text-blue-400">
+                    {kanbanItems.filter(i => i.type === 'build').length}
+                  </div>
+                  <div className="text-xs text-gray-400">🛠️ Build</div>
+                </div>
               </div>
-              <div>
-                <div className="text-2xl font-bold text-purple-400">
-                  {kanbanItems.filter(i => i.stage === 'brainstorm').length}
+            </div>
+            {/* Stage breakdown */}
+            <div className="mt-3 pt-3 border-t border-gray-700">
+              <div className="text-xs text-gray-400 mb-2">阶段</div>
+              <div className="grid grid-cols-3 gap-2 text-center">
+                <div>
+                  <div className="text-lg font-bold">
+                    {kanbanItems.filter(i => i.stage === 'backlog').length}
+                  </div>
+                  <div className="text-xs text-gray-400">⬜ Backlog</div>
                 </div>
-                <div className="text-xs text-gray-400">Brainstorm</div>
+                <div>
+                  <div className="text-lg font-bold text-blue-400">
+                    {kanbanItems.filter(i => i.stage === 'in_progress').length}
+                  </div>
+                  <div className="text-xs text-gray-400">🔵 进行中</div>
+                </div>
+                <div>
+                  <div className="text-lg font-bold text-green-400">
+                    {kanbanItems.filter(i => i.stage === 'done').length}
+                  </div>
+                  <div className="text-xs text-gray-400">✅ Done</div>
+                </div>
               </div>
             </div>
           </section>
@@ -306,16 +364,17 @@ function App() {
         item={selectedCard}
         isOpen={!!selectedCard}
         onClose={() => setSelectedCard(null)}
-        onMove={(stage) => selectedCard && handleMoveCard(selectedCard, stage)}
+        onMove={stage => selectedCard && handleMoveCard(selectedCard, stage)}
         onDelete={() => selectedCard && handleDeleteCard(selectedCard)}
       />
 
       <footer className="mt-8 text-center text-gray-500 text-sm">
-        Wendy's Work Tracker • 
-        <a href="https://github.com/wendyworksforpark-dev/wendy-tracker" 
-           target="_blank" 
-           rel="noopener noreferrer"
-           className="hover:text-gray-300 ml-1"
+        Wendy's Work Tracker •
+        <a
+          href="https://github.com/wendyworksforpark-dev/wendy-tracker"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-gray-300 ml-1"
         >
           GitHub
         </a>

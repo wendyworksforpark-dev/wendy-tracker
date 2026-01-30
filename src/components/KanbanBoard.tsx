@@ -25,11 +25,16 @@ interface Props {
 }
 
 const COLUMNS = [
-  { key: 'brainstorm' as const, title: '🌊 Brainstorm', color: 'bg-purple-900/50 border-purple-700' },
-  { key: 'idea' as const, title: '💡 Idea', color: 'bg-yellow-900/50 border-yellow-700' },
-  { key: 'product' as const, title: '📋 Product', color: 'bg-blue-900/50 border-blue-700' },
+  { key: 'backlog' as const, title: '⬜ Backlog', color: 'bg-gray-900/50 border-gray-600' },
+  { key: 'in_progress' as const, title: '🔵 In Progress', color: 'bg-blue-900/50 border-blue-700' },
   { key: 'done' as const, title: '✅ Done', color: 'bg-green-900/50 border-green-700' },
 ]
+
+const TYPE_BADGE: Record<KanbanItem['type'], { icon: string; color: string }> = {
+  idea: { icon: '💡', color: 'bg-yellow-900/50 text-yellow-300' },
+  research: { icon: '🔍', color: 'bg-purple-900/50 text-purple-300' },
+  build: { icon: '🛠️', color: 'bg-blue-900/50 text-blue-300' },
+}
 
 interface KanbanCardProps {
   item: KanbanItem
@@ -53,6 +58,8 @@ function KanbanCard({ item, index, onClick }: KanbanCardProps) {
     opacity: isDragging ? 0.5 : 1,
   }
 
+  const badge = TYPE_BADGE[item.type]
+
   return (
     <div
       ref={setNodeRef}
@@ -62,23 +69,36 @@ function KanbanCard({ item, index, onClick }: KanbanCardProps) {
       onClick={onClick}
       className="bg-gray-800 rounded-lg p-3 text-sm hover:bg-gray-700 transition cursor-grab active:cursor-grabbing shadow-lg overflow-hidden"
     >
+      <div className="flex items-center gap-2 mb-1">
+        <span className={`text-xs px-1.5 py-0.5 rounded ${badge.color}`}>
+          {badge.icon} {item.type}
+        </span>
+        {item.repo && (
+          <span className="text-xs text-gray-500">{item.repo}</span>
+        )}
+      </div>
       <div className="font-medium truncate">{item.title}</div>
       {item.description && (
         <div className="text-gray-400 text-xs mt-1 truncate">{item.description}</div>
       )}
-      {item.date && (
-        <div className="text-gray-500 text-xs mt-2">{item.date}</div>
-      )}
+      <div className="flex items-center gap-2 mt-2">
+        {item.date && (
+          <span className="text-gray-500 text-xs">{item.date}</span>
+        )}
+        {item.github_issue && (
+          <span className="text-gray-500 text-xs">#{item.github_issue}</span>
+        )}
+      </div>
     </div>
   )
 }
 
-function DroppableColumn({ 
-  column, 
+function DroppableColumn({
+  column,
   items,
-  onCardClick 
-}: { 
-  column: typeof COLUMNS[0]
+  onCardClick,
+}: {
+  column: (typeof COLUMNS)[0]
   items: KanbanItem[]
   onCardClick?: (item: KanbanItem) => void
 }) {
@@ -94,10 +114,10 @@ function DroppableColumn({
       <SortableContext items={itemIds} strategy={verticalListSortingStrategy}>
         <div className="space-y-2">
           {colItems.map((item, idx) => (
-            <KanbanCard 
-              key={`${column.key}-${idx}`} 
-              item={item} 
-              index={idx} 
+            <KanbanCard
+              key={`${column.key}-${idx}`}
+              item={item}
+              index={idx}
               onClick={() => onCardClick?.(item)}
             />
           ))}
@@ -117,17 +137,17 @@ export default function KanbanBoard({ items, onMove, onCardClick }: Props) {
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 8,
-      },
+      activationConstraint: { distance: 8 },
     }),
     useSensor(KeyboardSensor)
   )
 
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event
-    const [stage, indexStr] = (active.id as string).split('-')
-    const index = parseInt(indexStr)
+    const idStr = active.id as string
+    const lastDash = idStr.lastIndexOf('-')
+    const stage = idStr.slice(0, lastDash)
+    const index = parseInt(idStr.slice(lastDash + 1))
     const stageItems = items.filter(i => i.stage === stage)
     setActiveItem(stageItems[index])
   }
@@ -135,13 +155,15 @@ export default function KanbanBoard({ items, onMove, onCardClick }: Props) {
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
     setActiveItem(null)
-    
+
     if (!over || !onMove) return
-    
-    const [activeStage, activeIndexStr] = (active.id as string).split('-')
-    const activeIndex = parseInt(activeIndexStr)
+
+    const activeIdStr = active.id as string
+    const lastDash = activeIdStr.lastIndexOf('-')
+    const activeStage = activeIdStr.slice(0, lastDash)
+    const activeIndex = parseInt(activeIdStr.slice(lastDash + 1))
     const overIdStr = over.id as string
-    
+
     // Determine target column
     let targetStage: KanbanItem['stage'] | null = null
     for (const col of COLUMNS) {
@@ -150,7 +172,7 @@ export default function KanbanBoard({ items, onMove, onCardClick }: Props) {
         break
       }
     }
-    
+
     if (targetStage && targetStage !== activeStage) {
       const stageItems = items.filter(i => i.stage === activeStage)
       const movedItem = stageItems[activeIndex]
@@ -160,6 +182,8 @@ export default function KanbanBoard({ items, onMove, onCardClick }: Props) {
     }
   }
 
+  const badge = activeItem ? TYPE_BADGE[activeItem.type] : null
+
   return (
     <DndContext
       sensors={sensors}
@@ -167,16 +191,19 @@ export default function KanbanBoard({ items, onMove, onCardClick }: Props) {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {COLUMNS.map(col => (
           <DroppableColumn key={col.key} column={col} items={items} onCardClick={onCardClick} />
         ))}
       </div>
-      
+
       <DragOverlay>
-        {activeItem && (
+        {activeItem && badge && (
           <div className="bg-gray-800 rounded-lg p-3 text-sm shadow-2xl border border-blue-500">
-            <div className="font-medium">{activeItem.title}</div>
+            <span className={`text-xs px-1.5 py-0.5 rounded ${badge.color}`}>
+              {badge.icon} {activeItem.type}
+            </span>
+            <div className="font-medium mt-1">{activeItem.title}</div>
             {activeItem.description && (
               <div className="text-gray-400 text-xs mt-1">{activeItem.description}</div>
             )}
