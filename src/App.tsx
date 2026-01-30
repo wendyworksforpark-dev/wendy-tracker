@@ -60,44 +60,48 @@ function App() {
 
   const loadData = useCallback(async () => {
     setLoading(true)
+
+    // Fetch todos first — independent, never fails silently
+    try {
+      const todosResp = await fetch('./data/todos.json')
+      if (todosResp.ok) {
+        const todosData = await todosResp.json()
+        const mapped: TodoItem[] = todosData.map((t: any) => ({
+          id: t.id,
+          text: t.title,
+          done: t.status === 'completed',
+          time: t.completed_at ? new Date(t.completed_at).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }) : undefined,
+          priority: t.github_issue ? `#${t.github_issue}` : undefined,
+        }))
+        setTodos(mapped)
+      }
+    } catch (e) {
+      console.error('Failed to load todos:', e)
+    }
+
+    // Kanban / IDEAS.md
     try {
       const ideasContent = await fetchRawFile('IDEAS.md')
-      const items = parseIdeasMd(ideasContent)
-      setKanbanItems(items)
-      
-      const recentCommits = await fetchRecentCommits(10)
-      setCommits(recentCommits)
-      
-      const openIssues = await fetchIssues('wendy-tracker')
-      setIssues(openIssues)
-      
-      const cronStatus = await fetchCronStatus()
-      setCronJobs(cronStatus)
+      setKanbanItems(parseIdeasMd(ideasContent))
+    } catch (e) { console.error('Failed to load ideas:', e) }
 
-      // Fetch todos from todos.json
-      try {
-        const todosResp = await fetch('./data/todos.json')
-        if (todosResp.ok) {
-          const todosData = await todosResp.json()
-          const mapped: TodoItem[] = todosData.map((t: any) => ({
-            id: t.id,
-            text: t.title,
-            done: t.status === 'completed',
-            time: t.completed_at ? new Date(t.completed_at).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }) : undefined,
-            priority: t.github_issue ? `#${t.github_issue}` : undefined,
-          }))
-          setTodos(mapped)
-        }
-      } catch (e) {
-        console.error('Failed to load todos:', e)
-      }
+    // Commits
+    try {
+      setCommits(await fetchRecentCommits(10))
+    } catch (e) { console.error('Failed to load commits:', e) }
 
-      setLastUpdate(new Date())
-    } catch (error) {
-      console.error('Failed to load data:', error)
-    } finally {
-      setLoading(false)
-    }
+    // Issues
+    try {
+      setIssues(await fetchIssues('wendy-tracker'))
+    } catch (e) { console.error('Failed to load issues:', e) }
+
+    // Cron
+    try {
+      setCronJobs(await fetchCronStatus())
+    } catch (e) { console.error('Failed to load cron:', e) }
+
+    setLastUpdate(new Date())
+    setLoading(false)
   }, [])
 
   useEffect(() => {
