@@ -156,11 +156,11 @@
   },
   {
     "id": "hyperliquid-agent",
-    "title": "Hyperliquid 交易 Agent — rita CTA 策略移植",
+    "title": "Hyperliquid 交易 Agent — 多策略框架",
     "type": "build",
     "stage": "backlog",
     "status": "pending",
-    "description": "在Hyperliquid测试网上跑rita CTA策略，4h趋势+小级别入场，AI agent 24/7执行",
+    "description": "Hyperliquid测试网交易agent，支持多策略切换（CTA/均值回归/事件驱动），Park定策略+agent执行",
     "created_at": "2026-01-30T21:24:00+08:00"
   },
   {
