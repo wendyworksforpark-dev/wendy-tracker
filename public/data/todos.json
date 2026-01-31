@@ -269,10 +269,11 @@
     "id": "full-trading-pipeline",
     "title": "Hyperliquid TestNet 全自动交易Pipeline",
     "type": "build",
-    "stage": "in_progress",
-    "status": "in_progress",
+    "stage": "done",
+    "status": "completed",
     "description": "完整7步pipeline: SCAN→SIGNAL→RESEARCH→DECIDE→EXECUTE→MONITOR→CLOSE，TestNet 100%自主决策",
-    "created_at": "2026-01-31T09:28:00+08:00"
+    "created_at": "2026-01-31T09:28:00+08:00",
+    "completed_at": "2026-01-31T09:40:00+08:00"
   },
   {
     "id": "trading-agents-repo",
