@@ -244,5 +244,44 @@
     "status": "pending",
     "description": "解决新浪限流问题：懒加载+指数退避+增量更新+备用数据源",
     "created_at": "2026-01-30T10:00:00+08:00"
+  },
+  {
+    "id": "architecture-doc",
+    "title": "Trading Architecture 文档 — 7步Pipeline + Self-Learning Loop",
+    "type": "research",
+    "stage": "done",
+    "status": "completed",
+    "description": "Park定义的交易架构：SCAN→SIGNAL→RESEARCH→DECIDE→EXECUTE→MONITOR→CLOSE + Salience Score知识管理",
+    "created_at": "2026-01-31T08:55:00+08:00",
+    "completed_at": "2026-01-31T09:00:00+08:00"
+  },
+  {
+    "id": "journal-salience-system",
+    "title": "Trade Journal + Salience Scoring 系统",
+    "type": "build",
+    "stage": "done",
+    "status": "completed",
+    "description": "交易日志系统+知识评分引擎（66 tests passing）。Journal记录完整交易生命周期，Salience自动+0.1/-0.1/周衰减-0.02",
+    "created_at": "2026-01-31T09:10:00+08:00",
+    "completed_at": "2026-01-31T09:18:00+08:00"
+  },
+  {
+    "id": "full-trading-pipeline",
+    "title": "Hyperliquid TestNet 全自动交易Pipeline",
+    "type": "build",
+    "stage": "in_progress",
+    "status": "in_progress",
+    "description": "完整7步pipeline: SCAN→SIGNAL→RESEARCH→DECIDE→EXECUTE→MONITOR→CLOSE，TestNet 100%自主决策",
+    "created_at": "2026-01-31T09:28:00+08:00"
+  },
+  {
+    "id": "trading-agents-repo",
+    "title": "创建 trading-agents 独立 GitHub Repo",
+    "type": "build",
+    "stage": "done",
+    "status": "completed",
+    "description": "wendyworksforpark-dev/trading-agents (private) — 独立repo管理交易agent代码",
+    "created_at": "2026-01-31T09:30:00+08:00",
+    "completed_at": "2026-01-31T09:32:00+08:00"
   }
 ]
