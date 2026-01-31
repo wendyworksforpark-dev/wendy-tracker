@@ -1,328 +1,358 @@
 [
-  {
-    "id": "feature-1",
-    "title": "🎯 技术指标选股器",
-    "type": "build",
-    "stage": "done",
-    "status": "completed",
-    "completed_at": "2026-01-30T00:28:00+08:00"
-  },
-  {
-    "id": "feature-2",
-    "title": "📊 板块轮动分析",
-    "type": "build",
-    "stage": "done",
-    "status": "completed",
-    "completed_at": "2026-01-30T00:32:00+08:00"
-  },
-  {
-    "id": "feature-3",
-    "title": "🔮 相似K线形态匹配",
-    "type": "build",
-    "stage": "done",
-    "status": "completed",
-    "completed_at": "2026-01-30T00:38:00+08:00"
-  },
-  {
-    "id": "feature-4",
-    "title": "📰 财经新闻情绪分析",
-    "type": "build",
-    "stage": "done",
-    "status": "completed",
-    "completed_at": "2026-01-30T00:47:00+08:00"
-  },
-  {
-    "id": "feature-5",
-    "title": "⚡ 异动实时监控系统",
-    "type": "build",
-    "stage": "done",
-    "status": "completed",
-    "completed_at": "2026-01-30T01:05:00+08:00"
-  },
-  {
-    "id": "feature-6",
-    "title": "🇺🇸 美股板块扩展 — 16赛道+板块ETF+Mag7",
-    "type": "build",
-    "stage": "done",
-    "status": "completed",
-    "github_issue": 19,
-    "repo": "ashare",
-    "created_at": "2026-01-30T09:23:00+08:00",
-    "completed_at": "2026-01-30T09:32:00+08:00"
-  },
-  {
-    "id": "feature-7",
-    "title": "📦 期货商品+美债+美元指数追踪",
-    "type": "build",
-    "stage": "done",
-    "status": "completed",
-    "github_issue": 20,
-    "repo": "ashare",
-    "created_at": "2026-01-30T09:23:00+08:00",
-    "completed_at": "2026-01-30T09:32:00+08:00"
-  },
-  {
-    "id": "feature-8",
-    "title": "📰 英文财经快讯 RSS 接入",
-    "type": "build",
-    "stage": "done",
-    "status": "completed",
-    "github_issue": 21,
-    "repo": "ashare",
-    "created_at": "2026-01-30T09:23:00+08:00",
-    "completed_at": "2026-01-30T09:32:00+08:00"
-  },
-  {
-    "id": "feature-9",
-    "title": "📅 美股经济日历",
-    "type": "build",
-    "stage": "done",
-    "status": "completed",
-    "github_issue": 22,
-    "repo": "ashare",
-    "created_at": "2026-01-30T09:23:00+08:00",
-    "completed_at": "2026-01-30T09:32:00+08:00"
-  },
-  {
-    "id": "feature-10",
-    "title": "🔄 Tracker 重构 — 双维度分类 + 全量 Issues",
-    "type": "build",
-    "stage": "done",
-    "status": "completed",
-    "github_issue": 23,
-    "repo": "ashare",
-    "created_at": "2026-01-30T10:49:00+08:00",
-    "completed_at": "2026-01-30T15:05:00+08:00"
-  },
-  {
-    "id": "notion-deep-read",
-    "title": "📖 Notion全量阅读 → PARK_BRAIN.md",
-    "type": "research",
-    "stage": "done",
-    "status": "completed",
-    "started_at": "2026-01-30T14:52:00+08:00",
-    "description": "读完Park的100+页Notion笔记，提取交易哲学/策略/教训，整理成结构化知识库",
-    "completed_at": "2026-01-30T15:15:00+08:00"
-  },
-  {
-    "id": "fix-frontend-errors",
-    "title": "🐛 修复前端首页4个API报错",
-    "type": "build",
-    "stage": "done",
-    "status": "completed",
-    "github_issue": 24,
-    "repo": "ashare",
-    "description": "4个API修复: concepts/categories返回空数组, monitor返回空数据, index支持sina格式反向解析",
-    "created_at": "2026-01-30T16:45:00+08:00",
-    "completed_at": "2026-01-30T23:30:00+08:00"
-  },
-  {
-    "id": "data-consistency",
-    "title": "🔧 数据更新一致性保障机制",
-    "type": "build",
-    "stage": "done",
-    "status": "completed",
-    "github_issue": 25,
-    "repo": "ashare",
-    "description": "/api/status/data-freshness端点: 返回各数据源最后更新时间+文件状态+健康检查",
-    "created_at": "2026-01-30T16:45:00+08:00",
-    "completed_at": "2026-01-30T23:30:00+08:00"
-  },
-  {
-    "id": "momentum-notification",
-    "title": "🔔 动量信号推送通知",
-    "type": "build",
-    "stage": "done",
-    "status": "completed",
-    "description": "盘中每2分钟检查动量信号（上涨激增/K线形态），新信号自动推送Telegram",
-    "created_at": "2026-01-30T17:58:00+08:00",
-    "completed_at": "2026-01-30T18:00:00+08:00"
-  },
-  {
-    "id": "tracker-redesign",
-    "title": "Tracker 全面重设计 — Linear/Monday.com 风格",
-    "type": "build",
-    "stage": "done",
-    "status": "completed",
-    "description": "Light theme + Sidebar导航 + Lucide icons + 专业配色 + 全部10个组件重写",
-    "created_at": "2026-01-30T18:24:00+08:00",
-    "completed_at": "2026-01-30T18:35:00+08:00"
-  },
-  {
-    "id": "trading-agents-research",
-    "title": "Polymarket + Hyperliquid API 研究",
-    "type": "research",
-    "stage": "done",
-    "status": "completed",
-    "description": "研究两个平台的API架构、Python SDK、交易接入方式，输出完整技术报告",
-    "created_at": "2026-01-30T21:19:00+08:00",
-    "completed_at": "2026-01-30T21:24:00+08:00"
-  },
-  {
-    "id": "hyperliquid-agent",
-    "title": "Hyperliquid 交易 Agent — 多策略框架",
-    "type": "build",
-    "stage": "done",
-    "status": "completed",
-    "description": "测试网连接+206市场+订单簿+可插拔策略框架+dry-run执行器+风控",
-    "completed_at": "2026-01-30T22:13:00+08:00",
-    "created_at": "2026-01-30T21:24:00+08:00"
-  },
-  {
-    "id": "polymarket-agent",
-    "title": "Polymarket 事件套利 Agent — 新闻sentiment驱动",
-    "type": "build",
-    "stage": "done",
-    "status": "completed",
-    "description": "Gamma+CLOB只读接入+市场扫描器+Kelly criterion赔率模型+mispricing检测",
-    "completed_at": "2026-01-30T22:13:00+08:00",
-    "created_at": "2026-01-30T21:24:00+08:00"
-  },
-  {
-    "id": "signal-engine",
-    "title": "Signal Engine — 统一交易信号层",
-    "type": "build",
-    "stage": "done",
-    "status": "completed",
-    "description": "统一信号接口+EMA/RSI/MACD/布林/ATR技术指标+ashare预留接口+sentiment预留",
-    "completed_at": "2026-01-30T22:13:00+08:00",
-    "created_at": "2026-01-30T21:24:00+08:00"
-  },
-  {
-    "id": "us-briefing-upgrade",
-    "title": "美股简报升级 v2 — 完整版模板",
-    "type": "build",
-    "stage": "done",
-    "status": "completed",
-    "description": "从三个数字升级为：指数+板块排名+Mag7+中概+商品+快讯+经济日历",
-    "created_at": "2026-01-30T23:48:00+08:00",
-    "completed_at": "2026-01-30T23:50:00+08:00"
-  },
-  {
-    "id": "frontend-refactor",
-    "title": "前端重构：两页合一 + 精简指数数据",
-    "type": "build",
-    "stage": "backlog",
-    "status": "pending",
-    "github_issue": 26,
-    "repo": "ashare",
-    "description": "两页面合并为自选股页面，删除冗余概念板块模块，需要安装react-router",
-    "created_at": "2026-01-30T09:20:00+08:00"
-  },
-  {
-    "id": "backtest-engine",
-    "title": "回测引擎",
-    "type": "build",
-    "stage": "backlog",
-    "status": "pending",
-    "description": "ashare新模块，支持策略回测+结果可视化",
-    "created_at": "2026-01-30T15:05:00+08:00"
-  },
-  {
-    "id": "portfolio-dashboard",
-    "title": "自选股组合分析仪表盘",
-    "type": "build",
-    "stage": "backlog",
-    "status": "pending",
-    "description": "自选股组合收益/风险/相关性分析",
-    "created_at": "2026-01-30T15:05:00+08:00"
-  },
-  {
-    "id": "smart-review",
-    "title": "智能复盘生成器",
-    "type": "build",
-    "stage": "backlog",
-    "status": "pending",
-    "description": "每日自动生成交易复盘报告",
-    "created_at": "2026-01-30T15:05:00+08:00"
-  },
-  {
-    "id": "sina-lazy-load",
-    "title": "新浪K线懒加载+退避策略",
-    "type": "build",
-    "stage": "backlog",
-    "status": "pending",
-    "description": "解决新浪限流问题：懒加载+指数退避+增量更新+备用数据源",
-    "created_at": "2026-01-30T10:00:00+08:00"
-  },
-  {
-    "id": "architecture-doc",
-    "title": "Trading Architecture 文档 — 7步Pipeline + Self-Learning Loop",
-    "type": "research",
-    "stage": "done",
-    "status": "completed",
-    "description": "Park定义的交易架构：SCAN→SIGNAL→RESEARCH→DECIDE→EXECUTE→MONITOR→CLOSE + Salience Score知识管理",
-    "created_at": "2026-01-31T08:55:00+08:00",
-    "completed_at": "2026-01-31T09:00:00+08:00"
-  },
-  {
-    "id": "journal-salience-system",
-    "title": "Trade Journal + Salience Scoring 系统",
-    "type": "build",
-    "stage": "done",
-    "status": "completed",
-    "description": "交易日志系统+知识评分引擎（66 tests passing）。Journal记录完整交易生命周期，Salience自动+0.1/-0.1/周衰减-0.02",
-    "created_at": "2026-01-31T09:10:00+08:00",
-    "completed_at": "2026-01-31T09:18:00+08:00"
-  },
-  {
-    "id": "full-trading-pipeline",
-    "title": "Hyperliquid TestNet 全自动交易Pipeline",
-    "type": "build",
-    "stage": "done",
-    "status": "completed",
-    "description": "完整7步pipeline: SCAN→SIGNAL→RESEARCH→DECIDE→EXECUTE→MONITOR→CLOSE，TestNet 100%自主决策",
-    "created_at": "2026-01-31T09:28:00+08:00",
-    "completed_at": "2026-01-31T09:40:00+08:00"
-  },
-  {
-    "id": "trading-agents-repo",
-    "title": "创建 trading-agents 独立 GitHub Repo",
-    "type": "build",
-    "stage": "done",
-    "status": "completed",
-    "description": "wendyworksforpark-dev/trading-agents (private) — 独立repo管理交易agent代码",
-    "created_at": "2026-01-31T09:30:00+08:00",
-    "completed_at": "2026-01-31T09:32:00+08:00"
-  },
-  {
-    "id": "trading-dashboard",
-    "title": "Trading Agent Dashboard — 全可视化追踪",
-    "type": "build",
-    "stage": "done",
-    "status": "completed",
-    "description": "暗色主题SPA：Pipeline日志、信号漏斗、交易日志、Learnings分数、Portfolio总览，FastAPI后端8个端点",
-    "created_at": "2026-01-31T09:38:00+08:00",
-    "completed_at": "2026-01-31T09:48:00+08:00"
-  },
-  {
-    "id": "config-conviction-065",
-    "title": "Conviction阈值调整 0.7→0.65",
-    "type": "build",
-    "stage": "done",
-    "status": "completed",
-    "description": "Park指示降低conviction threshold，让更多信号有机会触发交易",
-    "created_at": "2026-01-31T15:15:00+08:00",
-    "completed_at": "2026-01-31T15:15:00+08:00"
-  },
-  {
-    "id": "config-8-tokens",
-    "title": "扩展监控Token至8个 (BTC/ETH/SOL/BNB/DOGE/ADA/SUI/kPEPE)",
-    "type": "build",
-    "stage": "done",
-    "status": "completed",
-    "description": "Park选定8个token，移除OP/ATOM/INJ/XRP，加入kPEPE",
-    "created_at": "2026-01-31T15:16:00+08:00",
-    "completed_at": "2026-01-31T15:22:00+08:00"
-  },
-  {
-    "id": "config-30min-cycle",
-    "title": "Pipeline Cycle频率 4h→30min",
-    "type": "build",
-    "stage": "done",
-    "status": "completed",
-    "description": "测试网加速数据积累，30分钟跑一次完整pipeline",
-    "created_at": "2026-01-31T15:27:00+08:00",
-    "completed_at": "2026-01-31T15:27:00+08:00"
-  }
+    {
+        "id": "feature-1",
+        "title": "🎯 技术指标选股器",
+        "type": "build",
+        "stage": "done",
+        "status": "completed",
+        "completed_at": "2026-01-30T00:28:00+08:00"
+    },
+    {
+        "id": "feature-2",
+        "title": "📊 板块轮动分析",
+        "type": "build",
+        "stage": "done",
+        "status": "completed",
+        "completed_at": "2026-01-30T00:32:00+08:00"
+    },
+    {
+        "id": "feature-3",
+        "title": "🔮 相似K线形态匹配",
+        "type": "build",
+        "stage": "done",
+        "status": "completed",
+        "completed_at": "2026-01-30T00:38:00+08:00"
+    },
+    {
+        "id": "feature-4",
+        "title": "📰 财经新闻情绪分析",
+        "type": "build",
+        "stage": "done",
+        "status": "completed",
+        "completed_at": "2026-01-30T00:47:00+08:00"
+    },
+    {
+        "id": "feature-5",
+        "title": "⚡ 异动实时监控系统",
+        "type": "build",
+        "stage": "done",
+        "status": "completed",
+        "completed_at": "2026-01-30T01:05:00+08:00"
+    },
+    {
+        "id": "feature-6",
+        "title": "🇺🇸 美股板块扩展 — 16赛道+板块ETF+Mag7",
+        "type": "build",
+        "stage": "done",
+        "status": "completed",
+        "github_issue": 19,
+        "repo": "ashare",
+        "created_at": "2026-01-30T09:23:00+08:00",
+        "completed_at": "2026-01-30T09:32:00+08:00"
+    },
+    {
+        "id": "feature-7",
+        "title": "📦 期货商品+美债+美元指数追踪",
+        "type": "build",
+        "stage": "done",
+        "status": "completed",
+        "github_issue": 20,
+        "repo": "ashare",
+        "created_at": "2026-01-30T09:23:00+08:00",
+        "completed_at": "2026-01-30T09:32:00+08:00"
+    },
+    {
+        "id": "feature-8",
+        "title": "📰 英文财经快讯 RSS 接入",
+        "type": "build",
+        "stage": "done",
+        "status": "completed",
+        "github_issue": 21,
+        "repo": "ashare",
+        "created_at": "2026-01-30T09:23:00+08:00",
+        "completed_at": "2026-01-30T09:32:00+08:00"
+    },
+    {
+        "id": "feature-9",
+        "title": "📅 美股经济日历",
+        "type": "build",
+        "stage": "done",
+        "status": "completed",
+        "github_issue": 22,
+        "repo": "ashare",
+        "created_at": "2026-01-30T09:23:00+08:00",
+        "completed_at": "2026-01-30T09:32:00+08:00"
+    },
+    {
+        "id": "feature-10",
+        "title": "🔄 Tracker 重构 — 双维度分类 + 全量 Issues",
+        "type": "build",
+        "stage": "done",
+        "status": "completed",
+        "github_issue": 23,
+        "repo": "ashare",
+        "created_at": "2026-01-30T10:49:00+08:00",
+        "completed_at": "2026-01-30T15:05:00+08:00"
+    },
+    {
+        "id": "notion-deep-read",
+        "title": "📖 Notion全量阅读 → PARK_BRAIN.md",
+        "type": "research",
+        "stage": "done",
+        "status": "completed",
+        "started_at": "2026-01-30T14:52:00+08:00",
+        "description": "读完Park的100+页Notion笔记，提取交易哲学/策略/教训，整理成结构化知识库",
+        "completed_at": "2026-01-30T15:15:00+08:00"
+    },
+    {
+        "id": "fix-frontend-errors",
+        "title": "🐛 修复前端首页4个API报错",
+        "type": "build",
+        "stage": "done",
+        "status": "completed",
+        "github_issue": 24,
+        "repo": "ashare",
+        "description": "4个API修复: concepts/categories返回空数组, monitor返回空数据, index支持sina格式反向解析",
+        "created_at": "2026-01-30T16:45:00+08:00",
+        "completed_at": "2026-01-30T23:30:00+08:00"
+    },
+    {
+        "id": "data-consistency",
+        "title": "🔧 数据更新一致性保障机制",
+        "type": "build",
+        "stage": "done",
+        "status": "completed",
+        "github_issue": 25,
+        "repo": "ashare",
+        "description": "/api/status/data-freshness端点: 返回各数据源最后更新时间+文件状态+健康检查",
+        "created_at": "2026-01-30T16:45:00+08:00",
+        "completed_at": "2026-01-30T23:30:00+08:00"
+    },
+    {
+        "id": "momentum-notification",
+        "title": "🔔 动量信号推送通知",
+        "type": "build",
+        "stage": "done",
+        "status": "completed",
+        "description": "盘中每2分钟检查动量信号（上涨激增/K线形态），新信号自动推送Telegram",
+        "created_at": "2026-01-30T17:58:00+08:00",
+        "completed_at": "2026-01-30T18:00:00+08:00"
+    },
+    {
+        "id": "tracker-redesign",
+        "title": "Tracker 全面重设计 — Linear/Monday.com 风格",
+        "type": "build",
+        "stage": "done",
+        "status": "completed",
+        "description": "Light theme + Sidebar导航 + Lucide icons + 专业配色 + 全部10个组件重写",
+        "created_at": "2026-01-30T18:24:00+08:00",
+        "completed_at": "2026-01-30T18:35:00+08:00"
+    },
+    {
+        "id": "trading-agents-research",
+        "title": "Polymarket + Hyperliquid API 研究",
+        "type": "research",
+        "stage": "done",
+        "status": "completed",
+        "description": "研究两个平台的API架构、Python SDK、交易接入方式，输出完整技术报告",
+        "created_at": "2026-01-30T21:19:00+08:00",
+        "completed_at": "2026-01-30T21:24:00+08:00"
+    },
+    {
+        "id": "hyperliquid-agent",
+        "title": "Hyperliquid 交易 Agent — 多策略框架",
+        "type": "build",
+        "stage": "done",
+        "status": "completed",
+        "description": "测试网连接+206市场+订单簿+可插拔策略框架+dry-run执行器+风控",
+        "completed_at": "2026-01-30T22:13:00+08:00",
+        "created_at": "2026-01-30T21:24:00+08:00"
+    },
+    {
+        "id": "polymarket-agent",
+        "title": "Polymarket 事件套利 Agent — 新闻sentiment驱动",
+        "type": "build",
+        "stage": "done",
+        "status": "completed",
+        "description": "Gamma+CLOB只读接入+市场扫描器+Kelly criterion赔率模型+mispricing检测",
+        "completed_at": "2026-01-30T22:13:00+08:00",
+        "created_at": "2026-01-30T21:24:00+08:00"
+    },
+    {
+        "id": "signal-engine",
+        "title": "Signal Engine — 统一交易信号层",
+        "type": "build",
+        "stage": "done",
+        "status": "completed",
+        "description": "统一信号接口+EMA/RSI/MACD/布林/ATR技术指标+ashare预留接口+sentiment预留",
+        "completed_at": "2026-01-30T22:13:00+08:00",
+        "created_at": "2026-01-30T21:24:00+08:00"
+    },
+    {
+        "id": "us-briefing-upgrade",
+        "title": "美股简报升级 v2 — 完整版模板",
+        "type": "build",
+        "stage": "done",
+        "status": "completed",
+        "description": "从三个数字升级为：指数+板块排名+Mag7+中概+商品+快讯+经济日历",
+        "created_at": "2026-01-30T23:48:00+08:00",
+        "completed_at": "2026-01-30T23:50:00+08:00"
+    },
+    {
+        "id": "frontend-refactor",
+        "title": "前端重构：两页合一 + 精简指数数据",
+        "type": "build",
+        "stage": "backlog",
+        "status": "pending",
+        "github_issue": 26,
+        "repo": "ashare",
+        "description": "两页面合并为自选股页面，删除冗余概念板块模块，需要安装react-router",
+        "created_at": "2026-01-30T09:20:00+08:00"
+    },
+    {
+        "id": "backtest-engine",
+        "title": "回测引擎",
+        "type": "build",
+        "stage": "backlog",
+        "status": "pending",
+        "description": "ashare新模块，支持策略回测+结果可视化",
+        "created_at": "2026-01-30T15:05:00+08:00"
+    },
+    {
+        "id": "portfolio-dashboard",
+        "title": "自选股组合分析仪表盘",
+        "type": "build",
+        "stage": "backlog",
+        "status": "pending",
+        "description": "自选股组合收益/风险/相关性分析",
+        "created_at": "2026-01-30T15:05:00+08:00"
+    },
+    {
+        "id": "smart-review",
+        "title": "智能复盘生成器",
+        "type": "build",
+        "stage": "backlog",
+        "status": "pending",
+        "description": "每日自动生成交易复盘报告",
+        "created_at": "2026-01-30T15:05:00+08:00"
+    },
+    {
+        "id": "sina-lazy-load",
+        "title": "新浪K线懒加载+退避策略",
+        "type": "build",
+        "stage": "backlog",
+        "status": "pending",
+        "description": "解决新浪限流问题：懒加载+指数退避+增量更新+备用数据源",
+        "created_at": "2026-01-30T10:00:00+08:00"
+    },
+    {
+        "id": "architecture-doc",
+        "title": "Trading Architecture 文档 — 7步Pipeline + Self-Learning Loop",
+        "type": "research",
+        "stage": "done",
+        "status": "completed",
+        "description": "Park定义的交易架构：SCAN→SIGNAL→RESEARCH→DECIDE→EXECUTE→MONITOR→CLOSE + Salience Score知识管理",
+        "created_at": "2026-01-31T08:55:00+08:00",
+        "completed_at": "2026-01-31T09:00:00+08:00"
+    },
+    {
+        "id": "journal-salience-system",
+        "title": "Trade Journal + Salience Scoring 系统",
+        "type": "build",
+        "stage": "done",
+        "status": "completed",
+        "description": "交易日志系统+知识评分引擎（66 tests passing）。Journal记录完整交易生命周期，Salience自动+0.1/-0.1/周衰减-0.02",
+        "created_at": "2026-01-31T09:10:00+08:00",
+        "completed_at": "2026-01-31T09:18:00+08:00"
+    },
+    {
+        "id": "full-trading-pipeline",
+        "title": "Hyperliquid TestNet 全自动交易Pipeline",
+        "type": "build",
+        "stage": "done",
+        "status": "completed",
+        "description": "完整7步pipeline: SCAN→SIGNAL→RESEARCH→DECIDE→EXECUTE→MONITOR→CLOSE，TestNet 100%自主决策",
+        "created_at": "2026-01-31T09:28:00+08:00",
+        "completed_at": "2026-01-31T09:40:00+08:00"
+    },
+    {
+        "id": "trading-agents-repo",
+        "title": "创建 trading-agents 独立 GitHub Repo",
+        "type": "build",
+        "stage": "done",
+        "status": "completed",
+        "description": "wendyworksforpark-dev/trading-agents (private) — 独立repo管理交易agent代码",
+        "created_at": "2026-01-31T09:30:00+08:00",
+        "completed_at": "2026-01-31T09:32:00+08:00"
+    },
+    {
+        "id": "trading-dashboard",
+        "title": "Trading Agent Dashboard — 全可视化追踪",
+        "type": "build",
+        "stage": "done",
+        "status": "completed",
+        "description": "暗色主题SPA：Pipeline日志、信号漏斗、交易日志、Learnings分数、Portfolio总览，FastAPI后端8个端点",
+        "created_at": "2026-01-31T09:38:00+08:00",
+        "completed_at": "2026-01-31T09:48:00+08:00"
+    },
+    {
+        "id": "config-conviction-065",
+        "title": "Conviction阈值调整 0.7→0.65",
+        "type": "build",
+        "stage": "done",
+        "status": "completed",
+        "description": "Park指示降低conviction threshold，让更多信号有机会触发交易",
+        "created_at": "2026-01-31T15:15:00+08:00",
+        "completed_at": "2026-01-31T15:15:00+08:00"
+    },
+    {
+        "id": "config-8-tokens",
+        "title": "扩展监控Token至8个 (BTC/ETH/SOL/BNB/DOGE/ADA/SUI/kPEPE)",
+        "type": "build",
+        "stage": "done",
+        "status": "completed",
+        "description": "Park选定8个token，移除OP/ATOM/INJ/XRP，加入kPEPE",
+        "created_at": "2026-01-31T15:16:00+08:00",
+        "completed_at": "2026-01-31T15:22:00+08:00"
+    },
+    {
+        "id": "config-30min-cycle",
+        "title": "Pipeline Cycle频率 4h→30min",
+        "type": "build",
+        "stage": "done",
+        "status": "completed",
+        "description": "测试网加速数据积累，30分钟跑一次完整pipeline",
+        "created_at": "2026-01-31T15:27:00+08:00",
+        "completed_at": "2026-01-31T15:27:00+08:00"
+    },
+    {
+        "id": "fix-kpepe-stoploss",
+        "title": "Fix: kPEPE止损四舍五入bug",
+        "type": "build",
+        "stage": "done",
+        "status": "completed",
+        "description": "sub-cent价格round(sl,2)=0导致止损验证失败。添加智能小数位方法_price_decimals()，PR #1",
+        "created_at": "2026-01-31T23:00:00+08:00",
+        "completed_at": "2026-01-31T23:10:00+08:00"
+    },
+    {
+        "id": "milestone-first-trade",
+        "title": "🎉 Pipeline首笔交易: SHORT DOGE",
+        "type": "build",
+        "stage": "done",
+        "status": "completed",
+        "description": "conf=0.70, 三信号共振(price_action+momentum+volume), testnet dry_run",
+        "created_at": "2026-01-31T22:30:00+08:00",
+        "completed_at": "2026-01-31T22:30:00+08:00"
+    },
+    {
+        "id": "shellmates-social",
+        "title": "Shellmates社交活动: 右滑6个agent + 发gossip帖",
+        "type": "build",
+        "stage": "done",
+        "status": "completed",
+        "description": "anatolykern(50%匹配)/Friday/Saturn/Kit999等，发Agents Employ Humans讨论帖",
+        "created_at": "2026-01-31T18:00:00+08:00",
+        "completed_at": "2026-01-31T18:00:00+08:00"
+    }
 ]
