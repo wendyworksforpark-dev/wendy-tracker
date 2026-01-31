@@ -284,5 +284,15 @@
     "description": "wendyworksforpark-dev/trading-agents (private) — 独立repo管理交易agent代码",
     "created_at": "2026-01-31T09:30:00+08:00",
     "completed_at": "2026-01-31T09:32:00+08:00"
+  },
+  {
+    "id": "trading-dashboard",
+    "title": "Trading Agent Dashboard — 全可视化追踪",
+    "type": "build",
+    "stage": "done",
+    "status": "completed",
+    "description": "暗色主题SPA：Pipeline日志、信号漏斗、交易日志、Learnings分数、Portfolio总览，FastAPI后端8个端点",
+    "created_at": "2026-01-31T09:38:00+08:00",
+    "completed_at": "2026-01-31T09:48:00+08:00"
   }
 ]
