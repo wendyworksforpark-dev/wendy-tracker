@@ -294,5 +294,35 @@
     "description": "暗色主题SPA：Pipeline日志、信号漏斗、交易日志、Learnings分数、Portfolio总览，FastAPI后端8个端点",
     "created_at": "2026-01-31T09:38:00+08:00",
     "completed_at": "2026-01-31T09:48:00+08:00"
+  },
+  {
+    "id": "config-conviction-065",
+    "title": "Conviction阈值调整 0.7→0.65",
+    "type": "build",
+    "stage": "done",
+    "status": "completed",
+    "description": "Park指示降低conviction threshold，让更多信号有机会触发交易",
+    "created_at": "2026-01-31T15:15:00+08:00",
+    "completed_at": "2026-01-31T15:15:00+08:00"
+  },
+  {
+    "id": "config-8-tokens",
+    "title": "扩展监控Token至8个 (BTC/ETH/SOL/BNB/DOGE/ADA/SUI/kPEPE)",
+    "type": "build",
+    "stage": "done",
+    "status": "completed",
+    "description": "Park选定8个token，移除OP/ATOM/INJ/XRP，加入kPEPE",
+    "created_at": "2026-01-31T15:16:00+08:00",
+    "completed_at": "2026-01-31T15:22:00+08:00"
+  },
+  {
+    "id": "config-30min-cycle",
+    "title": "Pipeline Cycle频率 4h→30min",
+    "type": "build",
+    "stage": "done",
+    "status": "completed",
+    "description": "测试网加速数据积累，30分钟跑一次完整pipeline",
+    "created_at": "2026-01-31T15:27:00+08:00",
+    "completed_at": "2026-01-31T15:27:00+08:00"
   }
 ]
