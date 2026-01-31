@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { X, Lightbulb, Search, Wrench } from 'lucide-react'
 import type { KanbanItem } from '../data/parser'
 
 interface Props {
@@ -6,6 +7,18 @@ interface Props {
   onClose: () => void
   onAdd: (item: Omit<KanbanItem, 'date'>) => void
 }
+
+const TYPES: { value: KanbanItem['type']; label: string; icon: typeof Lightbulb; color: string; bg: string }[] = [
+  { value: 'idea', label: 'Idea', icon: Lightbulb, color: 'text-amber-600', bg: 'bg-amber-50 border-amber-200' },
+  { value: 'research', label: 'Research', icon: Search, color: 'text-purple-600', bg: 'bg-purple-50 border-purple-200' },
+  { value: 'build', label: 'Build', icon: Wrench, color: 'text-indigo-600', bg: 'bg-indigo-50 border-indigo-200' },
+]
+
+const STAGES: { value: KanbanItem['stage']; label: string; dot: string }[] = [
+  { value: 'backlog', label: 'Backlog', dot: 'bg-slate-400' },
+  { value: 'in_progress', label: 'In Progress', dot: 'bg-blue-500' },
+  { value: 'done', label: 'Done', dot: 'bg-emerald-500' },
+]
 
 export default function AddCardModal({ isOpen, onClose, onAdd }: Props) {
   const [title, setTitle] = useState('')
@@ -34,70 +47,109 @@ export default function AddCardModal({ isOpen, onClose, onAdd }: Props) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-800 rounded-xl p-6 w-full max-w-md">
-        <h2 className="text-xl font-bold mb-4">➕ 添加新想法</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-slate-900/20 backdrop-blur-sm" onClick={onClose} />
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+      {/* Modal */}
+      <div className="relative bg-white rounded-xl shadow-xl w-full max-w-md border border-slate-200">
+        {/* Header */}
+        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+          <h2 className="text-base font-semibold text-slate-800">新建想法</h2>
+          <button
+            onClick={onClose}
+            className="p-1.5 rounded-md text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-5 space-y-4">
+          {/* Title */}
           <div>
-            <label className="block text-sm text-gray-400 mb-1">标题</label>
+            <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1.5">标题</label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full bg-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="输入想法标题..."
+              className="w-full bg-white border border-slate-200 rounded-md px-3 py-2 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 transition-colors"
+              placeholder="输入标题..."
               autoFocus
             />
           </div>
 
+          {/* Description */}
           <div>
-            <label className="block text-sm text-gray-400 mb-1">描述 (可选)</label>
+            <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1.5">
+              描述 <span className="text-slate-300 normal-case">可选</span>
+            </label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full bg-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 h-24 resize-none"
+              className="w-full bg-white border border-slate-200 rounded-md px-3 py-2 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 h-20 resize-none transition-colors"
               placeholder="详细描述..."
             />
           </div>
 
+          {/* Type — visual selector */}
           <div>
-            <label className="block text-sm text-gray-400 mb-1">类型</label>
-            <select
-              value={type}
-              onChange={(e) => setType(e.target.value as KanbanItem['type'])}
-              className="w-full bg-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="idea">💡 Idea</option>
-              <option value="research">🔍 Research</option>
-              <option value="build">🛠️ Build</option>
-            </select>
+            <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1.5">类型</label>
+            <div className="flex gap-2">
+              {TYPES.map(t => {
+                const Icon = t.icon
+                const isActive = type === t.value
+                return (
+                  <button
+                    key={t.value}
+                    type="button"
+                    onClick={() => setType(t.value)}
+                    className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium border transition-colors ${
+                      isActive ? `${t.bg} ${t.color}` : 'border-slate-200 text-slate-500 hover:bg-slate-50'
+                    }`}
+                  >
+                    <Icon size={14} />
+                    {t.label}
+                  </button>
+                )
+              })}
+            </div>
           </div>
 
+          {/* Stage */}
           <div>
-            <label className="block text-sm text-gray-400 mb-1">阶段</label>
-            <select
-              value={stage}
-              onChange={(e) => setStage(e.target.value as KanbanItem['stage'])}
-              className="w-full bg-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="backlog">⬜ Backlog</option>
-              <option value="in_progress">🔵 In Progress</option>
-              <option value="done">✅ Done</option>
-            </select>
+            <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1.5">阶段</label>
+            <div className="flex gap-2">
+              {STAGES.map(s => {
+                const isActive = stage === s.value
+                return (
+                  <button
+                    key={s.value}
+                    type="button"
+                    onClick={() => setStage(s.value)}
+                    className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium border transition-colors ${
+                      isActive ? 'border-slate-300 bg-slate-100 text-slate-700' : 'border-slate-200 text-slate-500 hover:bg-slate-50'
+                    }`}
+                  >
+                    <span className={`w-2 h-2 rounded-full ${s.dot}`} />
+                    {s.label}
+                  </button>
+                )
+              })}
+            </div>
           </div>
 
-          <div className="flex gap-3 pt-2">
+          {/* Actions */}
+          <div className="flex gap-2 pt-2">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition"
+              className="flex-1 px-4 py-2 text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-md transition-colors"
             >
               取消
             </button>
             <button
               type="submit"
-              className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition"
+              className="flex-1 px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md transition-colors"
             >
               添加
             </button>

@@ -16,6 +16,7 @@ import {
   useSortable,
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { Lightbulb, Search, Wrench, GripVertical } from 'lucide-react'
 import type { KanbanItem } from '../data/parser'
 
 interface Props {
@@ -25,15 +26,15 @@ interface Props {
 }
 
 const COLUMNS = [
-  { key: 'backlog' as const, title: '⬜ Backlog', color: 'bg-gray-900/50 border-gray-600' },
-  { key: 'in_progress' as const, title: '🔵 In Progress', color: 'bg-blue-900/50 border-blue-700' },
-  { key: 'done' as const, title: '✅ Done', color: 'bg-green-900/50 border-green-700' },
+  { key: 'backlog' as const, title: 'Backlog', dotColor: 'bg-slate-400', headerBg: 'bg-slate-50', borderColor: 'border-slate-200' },
+  { key: 'in_progress' as const, title: 'In Progress', dotColor: 'bg-blue-500', headerBg: 'bg-blue-50', borderColor: 'border-blue-200' },
+  { key: 'done' as const, title: 'Done', dotColor: 'bg-emerald-500', headerBg: 'bg-emerald-50', borderColor: 'border-emerald-200' },
 ]
 
-const TYPE_BADGE: Record<KanbanItem['type'], { icon: string; color: string }> = {
-  idea: { icon: '💡', color: 'bg-yellow-900/50 text-yellow-300' },
-  research: { icon: '🔍', color: 'bg-purple-900/50 text-purple-300' },
-  build: { icon: '🛠️', color: 'bg-blue-900/50 text-blue-300' },
+const TYPE_BADGE: Record<KanbanItem['type'], { icon: typeof Lightbulb; label: string; color: string; bg: string }> = {
+  idea: { icon: Lightbulb, label: 'Idea', color: 'text-amber-600', bg: 'bg-amber-50' },
+  research: { icon: Search, label: 'Research', color: 'text-purple-600', bg: 'bg-purple-50' },
+  build: { icon: Wrench, label: 'Build', color: 'text-indigo-600', bg: 'bg-indigo-50' },
 }
 
 interface KanbanCardProps {
@@ -55,39 +56,49 @@ function KanbanCard({ item, index, onClick }: KanbanCardProps) {
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    opacity: isDragging ? 0.5 : 1,
+    opacity: isDragging ? 0.4 : 1,
   }
 
   const badge = TYPE_BADGE[item.type]
+  const Icon = badge.icon
 
   return (
     <div
       ref={setNodeRef}
       style={style}
       {...attributes}
-      {...listeners}
-      onClick={onClick}
-      className="bg-gray-800 rounded-lg p-3 text-sm hover:bg-gray-700 transition cursor-grab active:cursor-grabbing shadow-lg overflow-hidden"
+      className="group bg-white rounded-lg border border-slate-200 p-3 text-sm hover:border-slate-300 hover:shadow-sm transition-all cursor-pointer"
     >
-      <div className="flex items-center gap-2 mb-1">
-        <span className={`text-xs px-1.5 py-0.5 rounded ${badge.color}`}>
-          {badge.icon} {item.type}
-        </span>
-        {item.repo && (
-          <span className="text-xs text-gray-500">{item.repo}</span>
-        )}
-      </div>
-      <div className="font-medium truncate">{item.title}</div>
-      {item.description && (
-        <div className="text-gray-400 text-xs mt-1 truncate">{item.description}</div>
-      )}
-      <div className="flex items-center gap-2 mt-2">
-        {item.date && (
-          <span className="text-gray-500 text-xs">{item.date}</span>
-        )}
-        {item.github_issue && (
-          <span className="text-gray-500 text-xs">#{item.github_issue}</span>
-        )}
+      <div className="flex items-start gap-2">
+        <div
+          {...listeners}
+          className="mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity cursor-grab active:cursor-grabbing text-slate-300 hover:text-slate-500"
+        >
+          <GripVertical size={14} />
+        </div>
+        <div className="flex-1 min-w-0" onClick={onClick}>
+          <div className="flex items-center gap-1.5 mb-1.5">
+            <span className={`inline-flex items-center gap-1 text-xs px-1.5 py-0.5 rounded ${badge.bg} ${badge.color} font-medium`}>
+              <Icon size={11} />
+              {badge.label}
+            </span>
+            {item.repo && (
+              <span className="text-xs text-slate-400 font-mono">{item.repo}</span>
+            )}
+          </div>
+          <div className="font-medium text-slate-800 truncate leading-snug">{item.title}</div>
+          {item.description && (
+            <div className="text-slate-500 text-xs mt-1 truncate leading-relaxed">{item.description}</div>
+          )}
+          <div className="flex items-center gap-2 mt-2">
+            {item.date && (
+              <span className="text-slate-400 text-xs">{item.date}</span>
+            )}
+            {item.github_issue && (
+              <span className="text-slate-400 text-xs font-mono">#{item.github_issue}</span>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   )
@@ -106,13 +117,21 @@ function DroppableColumn({
   const itemIds = colItems.map((_, idx) => `${column.key}-${idx}`)
 
   return (
-    <div className={`rounded-lg border p-4 min-h-[200px] ${column.color}`}>
-      <h3 className="font-semibold mb-3 text-sm flex justify-between">
-        {column.title}
-        <span className="text-gray-400">{colItems.length}</span>
-      </h3>
+    <div className="flex flex-col min-h-[250px] max-h-[calc(100vh-280px)]">
+      {/* Column header */}
+      <div className={`flex items-center justify-between px-3 py-2 rounded-lg mb-3 ${column.headerBg} shrink-0`}>
+        <div className="flex items-center gap-2">
+          <span className={`w-2 h-2 rounded-full ${column.dotColor}`} />
+          <h3 className="text-sm font-medium text-slate-700">{column.title}</h3>
+        </div>
+        <span className="text-xs text-slate-400 font-medium bg-white px-1.5 py-0.5 rounded">
+          {colItems.length}
+        </span>
+      </div>
+
+      {/* Cards — scrollable */}
       <SortableContext items={itemIds} strategy={verticalListSortingStrategy}>
-        <div className="space-y-2">
+        <div className="space-y-2 flex-1 overflow-y-auto pr-1">
           {colItems.map((item, idx) => (
             <KanbanCard
               key={`${column.key}-${idx}`}
@@ -122,8 +141,8 @@ function DroppableColumn({
             />
           ))}
           {colItems.length === 0 && (
-            <div className="text-gray-500 text-sm italic p-4 text-center border-2 border-dashed border-gray-600 rounded-lg">
-              拖拽到这里
+            <div className="text-slate-400 text-sm p-6 text-center border-2 border-dashed border-slate-200 rounded-lg">
+              No items
             </div>
           )}
         </div>
@@ -164,7 +183,6 @@ export default function KanbanBoard({ items, onMove, onCardClick }: Props) {
     const activeIndex = parseInt(activeIdStr.slice(lastDash + 1))
     const overIdStr = over.id as string
 
-    // Determine target column
     let targetStage: KanbanItem['stage'] | null = null
     for (const col of COLUMNS) {
       if (overIdStr.startsWith(col.key)) {
@@ -182,7 +200,7 @@ export default function KanbanBoard({ items, onMove, onCardClick }: Props) {
     }
   }
 
-  const badge = activeItem ? TYPE_BADGE[activeItem.type] : null
+  const activeBadge = activeItem ? TYPE_BADGE[activeItem.type] : null
 
   return (
     <DndContext
@@ -191,24 +209,28 @@ export default function KanbanBoard({ items, onMove, onCardClick }: Props) {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {COLUMNS.map(col => (
           <DroppableColumn key={col.key} column={col} items={items} onCardClick={onCardClick} />
         ))}
       </div>
 
       <DragOverlay>
-        {activeItem && badge && (
-          <div className="bg-gray-800 rounded-lg p-3 text-sm shadow-2xl border border-blue-500">
-            <span className={`text-xs px-1.5 py-0.5 rounded ${badge.color}`}>
-              {badge.icon} {activeItem.type}
-            </span>
-            <div className="font-medium mt-1">{activeItem.title}</div>
-            {activeItem.description && (
-              <div className="text-gray-400 text-xs mt-1">{activeItem.description}</div>
-            )}
-          </div>
-        )}
+        {activeItem && activeBadge && (() => {
+          const Icon = activeBadge.icon
+          return (
+            <div className="bg-white rounded-lg border-2 border-indigo-400 p-3 text-sm shadow-lg w-72">
+              <span className={`inline-flex items-center gap-1 text-xs px-1.5 py-0.5 rounded ${activeBadge.bg} ${activeBadge.color} font-medium`}>
+                <Icon size={11} />
+                {activeBadge.label}
+              </span>
+              <div className="font-medium text-slate-800 mt-1.5">{activeItem.title}</div>
+              {activeItem.description && (
+                <div className="text-slate-500 text-xs mt-1">{activeItem.description}</div>
+              )}
+            </div>
+          )
+        })()}
       </DragOverlay>
     </DndContext>
   )

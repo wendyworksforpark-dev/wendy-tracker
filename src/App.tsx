@@ -1,4 +1,20 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
+import {
+  LayoutGrid,
+  Calendar,
+  BarChart3,
+  Activity,
+  Plus,
+  RefreshCw,
+  Clock,
+  CheckCircle2,
+  Circle,
+  Lightbulb,
+  Search,
+  Wrench,
+  PanelLeftClose,
+  PanelLeftOpen,
+} from 'lucide-react'
 import KanbanBoard from './components/KanbanBoard'
 import TodoList from './components/TodoList'
 import CronJobs from './components/CronJobs'
@@ -18,6 +34,13 @@ const SAMPLE_TODOS: TodoItem[] = []
 
 type TabType = 'kanban' | 'calendar' | 'stats' | 'activity'
 
+const NAV_ITEMS: { key: TabType; label: string; icon: typeof LayoutGrid }[] = [
+  { key: 'kanban', label: '看板', icon: LayoutGrid },
+  { key: 'calendar', label: '日历', icon: Calendar },
+  { key: 'stats', label: '统计', icon: BarChart3 },
+  { key: 'activity', label: '活动', icon: Activity },
+]
+
 function App() {
   const [kanbanItems, setKanbanItems] = useState<KanbanItem[]>([])
   const [todos, setTodos] = useState<TodoItem[]>(SAMPLE_TODOS)
@@ -27,6 +50,7 @@ function App() {
   const [lastUpdate, setLastUpdate] = useState(new Date())
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<TabType>('kanban')
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
 
   // Modals
   const [showAddModal, setShowAddModal] = useState(false)
@@ -129,7 +153,6 @@ function App() {
   // Filtered items
   const filteredItems = useMemo(() => {
     return kanbanItems.filter(item => {
-      // Search filter
       if (searchTerm) {
         const term = searchTerm.toLowerCase()
         if (
@@ -139,15 +162,12 @@ function App() {
           return false
         }
       }
-      // Stage filter
       if (stageFilter !== 'all' && item.stage !== stageFilter) {
         return false
       }
-      // Type filter
       if (typeFilter !== 'all' && item.type !== typeFilter) {
         return false
       }
-      // Archive filter (done items older than 7 days)
       if (!showArchived && item.stage === 'done' && item.date) {
         const itemDate = new Date(item.date)
         const weekAgo = new Date()
@@ -160,200 +180,248 @@ function App() {
     })
   }, [kanbanItems, searchTerm, stageFilter, typeFilter, showArchived])
 
-  const tabs = [
-    { key: 'kanban' as const, label: '📋 看板' },
-    { key: 'calendar' as const, label: '📅 日历' },
-    { key: 'stats' as const, label: '📊 统计' },
-    { key: 'activity' as const, label: '⚡ 活动' },
-  ]
+  const todoStats = useMemo(() => ({
+    completed: todos.filter(t => t.done).length,
+    pending: todos.filter(t => !t.done).length,
+    ideas: todos.filter(t => t.type === 'idea').length,
+    research: todos.filter(t => t.type === 'research').length,
+    build: todos.filter(t => t.type === 'build').length,
+  }), [todos])
 
   return (
-    <div className="min-h-screen p-4 md:p-6 max-w-7xl mx-auto">
-      {/* Header */}
-      <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
-        <h1 className="text-2xl md:text-3xl font-bold flex items-center gap-2">
-          🐯 Wendy Work Tracker
-        </h1>
-        <div className="flex items-center gap-4">
-          <span className="text-gray-400 text-sm">
-            {lastUpdate.toLocaleTimeString('zh-CN')}
-          </span>
+    <div className="min-h-screen flex">
+      {/* Sidebar */}
+      <aside
+        className={`fixed left-0 top-0 h-full bg-slate-50 border-r border-slate-200 flex flex-col z-30 transition-all duration-200 ${
+          sidebarCollapsed ? 'w-16' : 'w-56'
+        }`}
+      >
+        {/* Logo + Collapse Toggle */}
+        <div className="h-14 flex items-center justify-between px-4 border-b border-slate-200 flex-shrink-0">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <span className="text-xl flex-shrink-0">🐯</span>
+            {!sidebarCollapsed && (
+              <span className="font-semibold text-slate-800 text-sm tracking-tight truncate">
+                Wendy Tracker
+              </span>
+            )}
+          </div>
           <button
-            onClick={loadData}
-            disabled={loading}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 rounded-lg transition flex items-center gap-2"
+            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+            className="flex-shrink-0 p-1 rounded-md text-slate-400 hover:text-slate-600 hover:bg-slate-200 transition-colors"
+            title={sidebarCollapsed ? '展开侧栏' : '收起侧栏'}
           >
-            {loading && <span className="animate-spin">⟳</span>}
-            刷新
+            {sidebarCollapsed ? <PanelLeftOpen size={16} /> : <PanelLeftClose size={16} />}
           </button>
         </div>
-      </header>
 
-      {/* Cron Jobs */}
-      <section className="mb-6">
-        <h2 className="text-lg font-semibold mb-3 flex items-center gap-2">
-          ⏰ 定时任务
-          <span className="text-sm text-gray-400 font-normal">
-            ({cronJobs.filter(j => j.lastStatus === 'ok').length}/{cronJobs.length})
-          </span>
-        </h2>
-        <CronJobs jobs={cronJobs} />
-      </section>
+        {/* Navigation */}
+        <nav className="flex-1 py-3 px-2 space-y-0.5">
+          {NAV_ITEMS.map(item => {
+            const Icon = item.icon
+            const isActive = activeTab === item.key
+            return (
+              <button
+                key={item.key}
+                onClick={() => setActiveTab(item.key)}
+                className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  isActive
+                    ? 'bg-indigo-50 text-indigo-700'
+                    : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                }`}
+              >
+                <Icon size={18} strokeWidth={isActive ? 2 : 1.5} className="flex-shrink-0" />
+                {!sidebarCollapsed && <span>{item.label}</span>}
+              </button>
+            )
+          })}
+        </nav>
 
-      {/* Tabs */}
-      <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
-        {tabs.map(tab => (
-          <button
-            key={tab.key}
-            onClick={() => setActiveTab(tab.key)}
-            className={`px-4 py-2 rounded-lg transition whitespace-nowrap ${
-              activeTab === tab.key ? 'bg-blue-600' : 'bg-gray-700 hover:bg-gray-600'
-            }`}
+        {/* Sidebar footer — spacer */}
+        <div className="p-2 border-t border-slate-200" />
+      </aside>
+
+      {/* Main Content Area */}
+      <div className={`flex-1 transition-all duration-200 ${sidebarCollapsed ? 'ml-16' : 'ml-56'}`}>
+        {/* Top Bar */}
+        <header className="h-14 flex items-center justify-between px-6 border-b border-slate-200 bg-white sticky top-0 z-20">
+          <div className="flex items-center gap-3">
+            <h1 className="text-base font-semibold text-slate-800">
+              {NAV_ITEMS.find(n => n.key === activeTab)?.label}
+            </h1>
+            {activeTab === 'kanban' && (
+              <span className="text-xs text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">
+                {filteredItems.length} items
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-slate-400">
+              {lastUpdate.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })}
+            </span>
+            <button
+              onClick={loadData}
+              disabled={loading}
+              className="p-2 rounded-md text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors disabled:opacity-40"
+              title="刷新数据"
+            >
+              <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
+            </button>
+            {activeTab === 'kanban' && (
+              <button
+                onClick={() => setShowAddModal(true)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md transition-colors"
+              >
+                <Plus size={15} />
+                添加
+              </button>
+            )}
+          </div>
+        </header>
+
+        {/* Page Content */}
+        <div className="p-6">
+          {/* Cron Jobs — always visible at top */}
+          <section className="mb-6">
+            <div className="flex items-center gap-2 mb-3">
+              <Clock size={16} className="text-slate-400" />
+              <h2 className="text-sm font-medium text-slate-600">定时任务</h2>
+              <span className="text-xs text-slate-400">
+                {cronJobs.filter(j => j.lastStatus === 'ok').length}/{cronJobs.length}
+              </span>
+            </div>
+            <CronJobs jobs={cronJobs} />
+          </section>
+
+          <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
+            {/* Main Content */}
+            <div className="xl:col-span-3 space-y-6">
+              {activeTab === 'kanban' && (
+                <section>
+                  <SearchFilter
+                    searchTerm={searchTerm}
+                    onSearchChange={setSearchTerm}
+                    stageFilter={stageFilter}
+                    onStageFilterChange={setStageFilter}
+                    typeFilter={typeFilter}
+                    onTypeFilterChange={setTypeFilter}
+                    showArchived={showArchived}
+                    onShowArchivedChange={setShowArchived}
+                  />
+                  <KanbanBoard
+                    items={filteredItems}
+                    onMove={handleMoveCard}
+                    onCardClick={handleCardClick}
+                  />
+                </section>
+              )}
+
+              {activeTab === 'calendar' && (
+                <CalendarView items={kanbanItems} />
+              )}
+
+              {activeTab === 'stats' && (
+                <BurndownChart items={kanbanItems} />
+              )}
+
+              {activeTab === 'activity' && (
+                <div className="space-y-6">
+                  <section>
+                    <h2 className="text-sm font-medium text-slate-600 mb-3">最近提交</h2>
+                    <CommitLog commits={commits} loading={loading} />
+                  </section>
+                  <section>
+                    <h2 className="text-sm font-medium text-slate-600 mb-3">GitHub Issues</h2>
+                    <IssuesList repoIssues={repoIssues} loading={loading} />
+                  </section>
+                </div>
+              )}
+            </div>
+
+            {/* Right Sidebar — Today's Tasks + Stats */}
+            <div className="space-y-4">
+              {/* Today's Tasks */}
+              <div className="bg-white rounded-lg border border-slate-200 shadow-sm">
+                <div className="px-4 py-3 border-b border-slate-100">
+                  <h3 className="text-sm font-medium text-slate-700">今日任务</h3>
+                </div>
+                <div className="p-3">
+                  <TodoList
+                    items={todos}
+                    onToggle={id => {
+                      setTodos(todos.map(t => (t.id === id ? { ...t, done: !t.done } : t)))
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Stats Card */}
+              <div className="bg-white rounded-lg border border-slate-200 shadow-sm">
+                <div className="px-4 py-3 border-b border-slate-100">
+                  <h3 className="text-sm font-medium text-slate-700">今日统计</h3>
+                </div>
+                <div className="p-4 space-y-4">
+                  {/* Completion */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="text-center p-3 bg-emerald-50 rounded-lg">
+                      <div className="flex items-center justify-center gap-1.5 mb-1">
+                        <CheckCircle2 size={14} className="text-emerald-500" />
+                        <span className="text-lg font-semibold text-emerald-700">{todoStats.completed}</span>
+                      </div>
+                      <span className="text-xs text-emerald-600">已完成</span>
+                    </div>
+                    <div className="text-center p-3 bg-amber-50 rounded-lg">
+                      <div className="flex items-center justify-center gap-1.5 mb-1">
+                        <Circle size={14} className="text-amber-500" />
+                        <span className="text-lg font-semibold text-amber-700">{todoStats.pending}</span>
+                      </div>
+                      <span className="text-xs text-amber-600">待完成</span>
+                    </div>
+                  </div>
+
+                  {/* Type breakdown */}
+                  <div>
+                    <div className="text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">类型</div>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="flex items-center gap-2 text-sm text-slate-600">
+                          <Lightbulb size={14} className="text-amber-500" /> Ideas
+                        </span>
+                        <span className="text-sm font-medium text-slate-700">{todoStats.ideas}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="flex items-center gap-2 text-sm text-slate-600">
+                          <Search size={14} className="text-purple-500" /> Research
+                        </span>
+                        <span className="text-sm font-medium text-slate-700">{todoStats.research}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="flex items-center gap-2 text-sm text-slate-600">
+                          <Wrench size={14} className="text-indigo-500" /> Build
+                        </span>
+                        <span className="text-sm font-medium text-slate-700">{todoStats.build}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <footer className="px-6 py-4 text-center text-xs text-slate-400">
+          Wendy's Work Tracker ·{' '}
+          <a
+            href="https://github.com/wendyworksforpark-dev/wendy-tracker"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-slate-400 hover:text-indigo-500 transition-colors"
           >
-            {tab.label}
-          </button>
-        ))}
+            GitHub
+          </a>
+        </footer>
       </div>
-
-      <main className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Main Content */}
-        <div className="lg:col-span-2 space-y-6">
-          {activeTab === 'kanban' && (
-            <section>
-              <div className="flex justify-between items-center mb-3">
-                <h2 className="text-lg font-semibold">📋 想法管道</h2>
-                <button
-                  onClick={() => setShowAddModal(true)}
-                  className="px-3 py-1 bg-green-600 hover:bg-green-700 rounded-lg text-sm transition"
-                >
-                  ➕ 添加
-                </button>
-              </div>
-              <SearchFilter
-                searchTerm={searchTerm}
-                onSearchChange={setSearchTerm}
-                stageFilter={stageFilter}
-                onStageFilterChange={setStageFilter}
-                typeFilter={typeFilter}
-                onTypeFilterChange={setTypeFilter}
-                showArchived={showArchived}
-                onShowArchivedChange={setShowArchived}
-              />
-              <KanbanBoard
-                items={filteredItems}
-                onMove={handleMoveCard}
-                onCardClick={handleCardClick}
-              />
-            </section>
-          )}
-
-          {activeTab === 'calendar' && (
-            <section>
-              <h2 className="text-lg font-semibold mb-3">📅 日历视图</h2>
-              <CalendarView items={kanbanItems} />
-            </section>
-          )}
-
-          {activeTab === 'stats' && (
-            <section>
-              <h2 className="text-lg font-semibold mb-3">📊 统计分析</h2>
-              <BurndownChart items={kanbanItems} />
-            </section>
-          )}
-
-          {activeTab === 'activity' && (
-            <>
-              <section>
-                <h2 className="text-lg font-semibold mb-3">📝 最近提交</h2>
-                <CommitLog commits={commits} loading={loading} />
-              </section>
-              <section>
-                <h2 className="text-lg font-semibold mb-3">🎯 GitHub Issues</h2>
-                <IssuesList repoIssues={repoIssues} loading={loading} />
-              </section>
-            </>
-          )}
-        </div>
-
-        {/* Sidebar */}
-        <div className="space-y-6">
-          <section>
-            <h2 className="text-lg font-semibold mb-3">📌 今日任务</h2>
-            <TodoList
-              items={todos}
-              onToggle={id => {
-                setTodos(todos.map(t => (t.id === id ? { ...t, done: !t.done } : t)))
-              }}
-            />
-          </section>
-
-          <section className="bg-gray-800 rounded-lg p-4">
-            <h3 className="font-semibold mb-2">📊 今日统计</h3>
-            <div className="grid grid-cols-2 gap-4 text-center">
-              <div>
-                <div className="text-2xl font-bold text-green-400">
-                  {todos.filter(t => t.done).length}
-                </div>
-                <div className="text-xs text-gray-400">已完成</div>
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-yellow-400">
-                  {todos.filter(t => !t.done).length}
-                </div>
-                <div className="text-xs text-gray-400">待完成</div>
-              </div>
-            </div>
-            {/* Type breakdown — from today's todos */}
-            <div className="mt-3 pt-3 border-t border-gray-700">
-              <div className="text-xs text-gray-400 mb-2">类型</div>
-              <div className="grid grid-cols-3 gap-2 text-center">
-                <div>
-                  <div className="text-lg font-bold text-yellow-400">
-                    {todos.filter(t => t.type === 'idea').length}
-                  </div>
-                  <div className="text-xs text-gray-400">💡 Ideas</div>
-                </div>
-                <div>
-                  <div className="text-lg font-bold text-purple-400">
-                    {todos.filter(t => t.type === 'research').length}
-                  </div>
-                  <div className="text-xs text-gray-400">🔍 Research</div>
-                </div>
-                <div>
-                  <div className="text-lg font-bold text-blue-400">
-                    {todos.filter(t => t.type === 'build').length}
-                  </div>
-                  <div className="text-xs text-gray-400">🛠️ Build</div>
-                </div>
-              </div>
-            </div>
-            {/* Stage breakdown — from today's todos */}
-            <div className="mt-3 pt-3 border-t border-gray-700">
-              <div className="text-xs text-gray-400 mb-2">阶段</div>
-              <div className="grid grid-cols-3 gap-2 text-center">
-                <div>
-                  <div className="text-lg font-bold">
-                    {todos.filter(t => t.status === 'pending').length}
-                  </div>
-                  <div className="text-xs text-gray-400">⬜ 待处理</div>
-                </div>
-                <div>
-                  <div className="text-lg font-bold text-blue-400">
-                    {todos.filter(t => t.status === 'in_progress').length}
-                  </div>
-                  <div className="text-xs text-gray-400">🔵 进行中</div>
-                </div>
-                <div>
-                  <div className="text-lg font-bold text-green-400">
-                    {todos.filter(t => t.status === 'completed').length}
-                  </div>
-                  <div className="text-xs text-gray-400">✅ 已完成</div>
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
-      </main>
 
       {/* Modals */}
       <AddCardModal
@@ -369,18 +437,6 @@ function App() {
         onMove={stage => selectedCard && handleMoveCard(selectedCard, stage)}
         onDelete={() => selectedCard && handleDeleteCard(selectedCard)}
       />
-
-      <footer className="mt-8 text-center text-gray-500 text-sm">
-        Wendy's Work Tracker •
-        <a
-          href="https://github.com/wendyworksforpark-dev/wendy-tracker"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:text-gray-300 ml-1"
-        >
-          GitHub
-        </a>
-      </footer>
     </div>
   )
 }

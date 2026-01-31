@@ -1,8 +1,15 @@
 import { useMemo } from 'react'
+import { ChevronLeft, ChevronRight, Lightbulb, Search, Wrench } from 'lucide-react'
 import type { KanbanItem } from '../data/parser'
 
 interface Props {
   items: KanbanItem[]
+}
+
+const TYPE_ICONS: Record<KanbanItem['type'], { icon: typeof Lightbulb; color: string }> = {
+  idea: { icon: Lightbulb, color: 'text-amber-500' },
+  research: { icon: Search, color: 'text-purple-500' },
+  build: { icon: Wrench, color: 'text-indigo-500' },
 }
 
 export default function CalendarView({ items }: Props) {
@@ -11,13 +18,11 @@ export default function CalendarView({ items }: Props) {
   const currentYear = today.getFullYear()
 
   const calendarData = useMemo(() => {
-    // Get first day of month and total days
     const firstDay = new Date(currentYear, currentMonth, 1)
     const lastDay = new Date(currentYear, currentMonth + 1, 0)
     const daysInMonth = lastDay.getDate()
     const startDayOfWeek = firstDay.getDay()
 
-    // Group items by date
     const itemsByDate: Record<string, KanbanItem[]> = {}
     items.forEach(item => {
       if (item.date) {
@@ -29,16 +34,13 @@ export default function CalendarView({ items }: Props) {
       }
     })
 
-    // Build calendar grid
     const weeks: (number | null)[][] = []
     let week: (number | null)[] = []
-    
-    // Fill in blanks before first day
+
     for (let i = 0; i < startDayOfWeek; i++) {
       week.push(null)
     }
 
-    // Fill in days
     for (let day = 1; day <= daysInMonth; day++) {
       week.push(day)
       if (week.length === 7) {
@@ -47,7 +49,6 @@ export default function CalendarView({ items }: Props) {
       }
     }
 
-    // Fill in remaining blanks
     while (week.length > 0 && week.length < 7) {
       week.push(null)
     }
@@ -58,7 +59,7 @@ export default function CalendarView({ items }: Props) {
     return { weeks, itemsByDate, daysInMonth }
   }, [items, currentMonth, currentYear])
 
-  const monthNames = ['一月', '二月', '三月', '四月', '五月', '六月', 
+  const monthNames = ['一月', '二月', '三月', '四月', '五月', '六月',
                       '七月', '八月', '九月', '十月', '十一月', '十二月']
   const dayNames = ['日', '一', '二', '三', '四', '五', '六']
 
@@ -69,61 +70,85 @@ export default function CalendarView({ items }: Props) {
   }
 
   return (
-    <div className="bg-gray-800 rounded-lg p-4">
-      <h3 className="text-lg font-semibold mb-4 text-center">
-        📅 {currentYear}年 {monthNames[currentMonth]}
-      </h3>
-      
-      {/* Header */}
-      <div className="grid grid-cols-7 gap-1 mb-2">
-        {dayNames.map(day => (
-          <div key={day} className="text-center text-sm text-gray-400 py-1">
-            {day}
-          </div>
-        ))}
+    <div className="bg-white rounded-lg border border-slate-200 shadow-sm">
+      {/* Month header */}
+      <div className="flex items-center justify-between px-5 py-3 border-b border-slate-100">
+        <button className="p-1.5 rounded-md text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors">
+          <ChevronLeft size={16} />
+        </button>
+        <h3 className="text-sm font-semibold text-slate-700">
+          {currentYear}年 {monthNames[currentMonth]}
+        </h3>
+        <button className="p-1.5 rounded-md text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors">
+          <ChevronRight size={16} />
+        </button>
       </div>
 
-      {/* Calendar Grid */}
-      <div className="grid grid-cols-7 gap-1">
-        {calendarData.weeks.flat().map((day, idx) => {
-          if (day === null) {
-            return <div key={idx} className="h-16 bg-gray-900/50 rounded" />
-          }
-
-          const dateKey = getDateKey(day)
-          const dayItems = calendarData.itemsByDate[dateKey] || []
-          const isToday = day === today.getDate()
-
-          return (
-            <div
-              key={idx}
-              className={`h-16 rounded p-1 overflow-hidden ${
-                isToday ? 'bg-blue-900/50 ring-1 ring-blue-500' : 'bg-gray-700/50 hover:bg-gray-700'
-              }`}
-            >
-              <div className={`text-xs ${isToday ? 'text-blue-400 font-bold' : 'text-gray-400'}`}>
-                {day}
-              </div>
-              <div className="space-y-0.5 mt-0.5">
-                {dayItems.slice(0, 2).map((item, i) => (
-                  <div
-                    key={i}
-                    className={`text-xs truncate px-1 rounded ${
-                      item.stage === 'done' ? 'bg-green-900/50 text-green-300' :
-                      item.stage === 'in_progress' ? 'bg-blue-900/50 text-blue-300' :
-                      'bg-gray-700/50 text-gray-300'
-                    }`}
-                  >
-                    {item.type === 'idea' ? '💡' : item.type === 'research' ? '🔍' : '🛠️'} {item.title}
-                  </div>
-                ))}
-                {dayItems.length > 2 && (
-                  <div className="text-xs text-gray-400">+{dayItems.length - 2}</div>
-                )}
-              </div>
+      <div className="p-4">
+        {/* Day names header */}
+        <div className="grid grid-cols-7 gap-1 mb-2">
+          {dayNames.map(day => (
+            <div key={day} className="text-center text-xs font-medium text-slate-400 py-1">
+              {day}
             </div>
-          )
-        })}
+          ))}
+        </div>
+
+        {/* Calendar Grid */}
+        <div className="grid grid-cols-7 gap-1">
+          {calendarData.weeks.flat().map((day, idx) => {
+            if (day === null) {
+              return <div key={idx} className="h-20 rounded-md" />
+            }
+
+            const dateKey = getDateKey(day)
+            const dayItems = calendarData.itemsByDate[dateKey] || []
+            const isToday = day === today.getDate()
+
+            return (
+              <div
+                key={idx}
+                className={`h-20 rounded-md p-1.5 transition-colors ${
+                  isToday
+                    ? 'bg-indigo-50 ring-1 ring-indigo-200'
+                    : dayItems.length > 0
+                    ? 'bg-slate-50 hover:bg-slate-100'
+                    : 'hover:bg-slate-50'
+                }`}
+              >
+                <div className={`text-xs mb-1 ${
+                  isToday ? 'text-indigo-600 font-semibold' : 'text-slate-500'
+                }`}>
+                  {day}
+                </div>
+                <div className="space-y-0.5">
+                  {dayItems.slice(0, 2).map((item, i) => {
+                    const typeInfo = TYPE_ICONS[item.type]
+                    const Icon = typeInfo.icon
+                    return (
+                      <div
+                        key={i}
+                        className={`flex items-center gap-0.5 text-xs truncate px-1 py-0.5 rounded ${
+                          item.stage === 'done'
+                            ? 'bg-emerald-50 text-emerald-700'
+                            : item.stage === 'in_progress'
+                            ? 'bg-blue-50 text-blue-700'
+                            : 'bg-white text-slate-600 border border-slate-200'
+                        }`}
+                      >
+                        <Icon size={9} className={typeInfo.color} />
+                        <span className="truncate">{item.title}</span>
+                      </div>
+                    )
+                  })}
+                  {dayItems.length > 2 && (
+                    <div className="text-xs text-slate-400 pl-1">+{dayItems.length - 2}</div>
+                  )}
+                </div>
+              </div>
+            )
+          })}
+        </div>
       </div>
     </div>
   )

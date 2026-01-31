@@ -1,3 +1,4 @@
+import { Check } from 'lucide-react'
 import type { TodoItem } from '../data/parser'
 
 interface Props {
@@ -7,53 +8,73 @@ interface Props {
 
 export default function TodoList({ items, onToggle }: Props) {
   const sortedItems = [...items].sort((a, b) => {
-    // Done items go to bottom
     if (a.done !== b.done) return a.done ? 1 : -1
-    // Then by time
     if (a.time && b.time) return a.time.localeCompare(b.time)
-    // Then by priority
     const priorityOrder = { 'P0': 0, 'P1': 1, 'P2': 2 }
     const aPri = a.priority ? priorityOrder[a.priority as keyof typeof priorityOrder] ?? 3 : 3
     const bPri = b.priority ? priorityOrder[b.priority as keyof typeof priorityOrder] ?? 3 : 3
     return aPri - bPri
   })
 
-  return (
-    <div className="bg-gray-800 rounded-lg p-4">
-      <div className="space-y-2">
-        {sortedItems.map(item => (
-          <div 
-            key={item.id}
-            onClick={() => onToggle(item.id)}
-            className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition
-              ${item.done ? 'bg-gray-700/50 text-gray-500' : 'bg-gray-700 hover:bg-gray-600'}`}
-          >
-            <div className={`w-5 h-5 rounded border-2 flex items-center justify-center
-              ${item.done ? 'border-green-500 bg-green-500/20' : 'border-gray-500'}`}
-            >
-              {item.done && <span className="text-green-400 text-xs">✓</span>}
-            </div>
-            
-            <div className="flex-1">
-              <span className={item.done ? 'line-through' : ''}>{item.text}</span>
-            </div>
+  if (sortedItems.length === 0) {
+    return (
+      <div className="py-6 text-center text-sm text-slate-400">
+        暂无任务
+      </div>
+    )
+  }
 
+  return (
+    <div className="space-y-0.5">
+      {sortedItems.map(item => (
+        <div
+          key={item.id}
+          onClick={() => onToggle(item.id)}
+          className={`flex items-center gap-3 px-2 py-2 rounded-md cursor-pointer transition-colors group ${
+            item.done ? 'opacity-50' : 'hover:bg-slate-50'
+          }`}
+        >
+          {/* Checkbox */}
+          <div
+            className={`w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
+              item.done
+                ? 'border-emerald-500 bg-emerald-500'
+                : 'border-slate-300 group-hover:border-slate-400'
+            }`}
+          >
+            {item.done && <Check size={10} className="text-white" strokeWidth={3} />}
+          </div>
+
+          {/* Text */}
+          <span
+            className={`flex-1 text-sm leading-snug ${
+              item.done ? 'line-through text-slate-400' : 'text-slate-700'
+            }`}
+          >
+            {item.text}
+          </span>
+
+          {/* Meta */}
+          <div className="flex items-center gap-1.5 flex-shrink-0">
             {item.time && (
-              <span className="text-xs text-gray-400 font-mono">{item.time}</span>
+              <span className="text-xs text-slate-400 font-mono">{item.time}</span>
             )}
-            
             {item.priority && (
-              <span className={`text-xs px-2 py-0.5 rounded font-medium
-                ${item.priority === 'P0' ? 'bg-red-900 text-red-300' : 
-                  item.priority === 'P1' ? 'bg-yellow-900 text-yellow-300' : 
-                  'bg-gray-600 text-gray-300'}`}
+              <span
+                className={`text-xs px-1.5 py-0.5 rounded font-medium ${
+                  item.priority === 'P0'
+                    ? 'bg-rose-50 text-rose-600'
+                    : item.priority === 'P1'
+                    ? 'bg-amber-50 text-amber-600'
+                    : 'bg-slate-100 text-slate-500'
+                }`}
               >
                 {item.priority}
               </span>
             )}
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   )
 }

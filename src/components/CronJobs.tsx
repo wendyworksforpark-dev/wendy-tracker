@@ -1,3 +1,4 @@
+import { CheckCircle2, Clock, Minus } from 'lucide-react'
 import type { CronJob } from '../lib/github'
 
 interface Props {
@@ -8,64 +9,87 @@ export default function CronJobs({ jobs }: Props) {
   const now = new Date()
   const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`
   const today = now.toISOString().split('T')[0]
-  
-  // Separate A-share and US jobs
+
   const aShareJobs = jobs.filter(j => j.id.startsWith('market-') || j.id === 'daily-todo')
   const usJobs = jobs.filter(j => j.id.startsWith('us-'))
-  
+
   const renderJob = (job: CronJob) => {
     const jobTime = job.nextRun || ''
     const isCompleted = job.lastRun && job.lastRun.includes(today)
-    const isPast = jobTime < currentTime && !jobTime.startsWith('0') // Handle overnight US jobs
+    const isPast = jobTime < currentTime && !jobTime.startsWith('0')
     const isCurrent = Math.abs(
       parseInt(jobTime.split(':')[0]) * 60 + parseInt(jobTime.split(':')[1]) -
       (now.getHours() * 60 + now.getMinutes())
     ) <= 5
-    
+
     return (
-      <div 
+      <div
         key={job.id}
-        className={`p-2 rounded-lg text-center transition text-sm
-          ${isCurrent ? 'bg-blue-600 animate-pulse' : 
-            isCompleted ? 'bg-green-900/50 text-green-300' :
-            isPast ? 'bg-gray-700/50 text-gray-500' : 
-            'bg-gray-700 hover:bg-gray-600'}`}
+        className={`flex items-center gap-1.5 px-2 py-1.5 rounded-md text-xs transition-colors ${
+          isCurrent
+            ? 'bg-indigo-50 border border-indigo-200 text-indigo-700'
+            : isCompleted
+            ? 'bg-emerald-50 text-emerald-700'
+            : isPast
+            ? 'bg-slate-50 text-slate-400'
+            : 'bg-white border border-slate-200 text-slate-600 hover:border-slate-300'
+        }`}
+        title={job.name}
       >
-        <div className="font-mono font-bold">
-          {jobTime}
-        </div>
-        <div className="text-xs text-gray-400 truncate">
-          {job.name}
-        </div>
-        {isCompleted && (
-          <div className="text-xs text-green-400">✓</div>
+        {/* Status icon */}
+        {isCompleted ? (
+          <CheckCircle2 size={12} className="text-emerald-500 flex-shrink-0" />
+        ) : isCurrent ? (
+          <Clock size={12} className="text-indigo-500 animate-pulse flex-shrink-0" />
+        ) : (
+          <Minus size={12} className="text-slate-300 flex-shrink-0" />
         )}
+        <span className="font-mono font-medium">{jobTime}</span>
       </div>
     )
   }
-  
+
   const completedAShare = aShareJobs.filter(j => j.lastRun && j.lastRun.includes(today)).length
   const completedUS = usJobs.filter(j => j.lastRun && j.lastRun.includes(today)).length
-  
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {/* A-Share Jobs */}
       <div>
-        <h3 className="text-sm text-gray-400 mb-2">
-          🇨🇳 A股 ({completedAShare}/{aShareJobs.length})
-        </h3>
-        <div className="grid grid-cols-5 md:grid-cols-11 gap-1">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-xs font-medium text-slate-500">A股</span>
+          <span className="text-xs text-slate-400">
+            {completedAShare}/{aShareJobs.length}
+          </span>
+          {/* Mini progress */}
+          <div className="flex-1 h-1 bg-slate-100 rounded-full max-w-[80px]">
+            <div
+              className="h-1 bg-emerald-400 rounded-full transition-all"
+              style={{ width: aShareJobs.length > 0 ? `${(completedAShare / aShareJobs.length) * 100}%` : '0%' }}
+            />
+          </div>
+        </div>
+        <div className="flex flex-wrap gap-1">
           {aShareJobs.map(renderJob)}
         </div>
       </div>
-      
+
       {/* US Jobs */}
       {usJobs.length > 0 && (
         <div>
-          <h3 className="text-sm text-gray-400 mb-2">
-            🇺🇸 美股 ({completedUS}/{usJobs.length})
-          </h3>
-          <div className="grid grid-cols-5 md:grid-cols-14 gap-1">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-xs font-medium text-slate-500">美股</span>
+            <span className="text-xs text-slate-400">
+              {completedUS}/{usJobs.length}
+            </span>
+            <div className="flex-1 h-1 bg-slate-100 rounded-full max-w-[80px]">
+              <div
+                className="h-1 bg-emerald-400 rounded-full transition-all"
+                style={{ width: usJobs.length > 0 ? `${(completedUS / usJobs.length) * 100}%` : '0%' }}
+              />
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-1">
             {usJobs.map(renderJob)}
           </div>
         </div>
